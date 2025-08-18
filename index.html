@@ -1,0 +1,2208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Durgaraj Chauhan - Technical Professional</title>
+    
+    <!-- External Libraries -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --success-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            
+            /* Light Theme */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --text-primary: #1a202c;
+            --text-secondary: #718096;
+            --border-color: #e2e8f0;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+            --border-color: #2d3748;
+            --card-bg: rgba(26, 26, 26, 0.9);
+            --shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            --glass-bg: rgba(26, 26, 26, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            background: var(--primary-gradient);
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            background: var(--secondary-gradient);
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .shape:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            background: var(--accent-gradient);
+            top: 80%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-gradient);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .theme-toggle {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            padding: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-primary);
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary-gradient);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            background: var(--bg-primary);
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 0 2rem;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: slideInDown 1s ease-out;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            animation: slideInUp 1s ease-out 0.2s both;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 3rem;
+            animation: fadeIn 1s ease-out 0.4s both;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: slideInUp 1s ease-out 0.6s both;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary-gradient);
+        }
+
+        /* Sections */
+        .section {
+            padding: 5rem 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px); /* Safari support */
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow);
+        }
+
+        /* Skills Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .skill-category {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .skill-category:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow);
+        }
+
+        .skill-icon {
+            font-size: 3rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            justify-content: center;
+        }
+
+        .skill-tag {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* Experience Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--primary-gradient);
+            border-radius: 3px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+            padding-left: 2rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 0;
+            width: 15px;
+            height: 15px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            transform: translateX(-50%);
+        }
+
+        .timeline-content {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow);
+        }
+
+        .project-image {
+            height: 200px;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+        }
+
+        .project-content {
+            padding: 2rem;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tech-tag {
+            background: var(--accent-gradient);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        /* Contact Form */
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Chatbot */
+        .chatbot-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+        }
+
+        .chatbot-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .chatbot-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .chatbot-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 350px;
+            height: 500px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chatbot-header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message {
+            padding: 0.8rem 1rem;
+            border-radius: 15px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .message.user {
+            background: var(--primary-gradient);
+            color: white;
+            align-self: flex-end;
+        }
+
+        .message.bot {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            align-self: flex-start;
+        }
+
+        .chatbot-input {
+            display: flex;
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            margin-right: 0.5rem;
+        }
+
+        .chatbot-input button {
+            background: var(--primary-gradient);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Animations */
+        @keyframes slideInDown {
+            from {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .chatbot-window {
+                width: 300px;
+                height: 400px;
+            }
+
+            .section {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Particle Effect */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            animation: particleFloat 8s linear infinite;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        /* Social Links */
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .social-link {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: var(--primary-gradient);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* Stats Counter */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-secondary);
+            padding: 3rem 0 2rem;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--primary-gradient);
+            z-index: 9999;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="floating-shapes">
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
+        </div>
+        <div class="particles" id="particles"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">Durgaraj Chauhan</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </div>
+            <button class="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title" data-aos="fade-down">Durgaraj Chauhan</h1>
+            <h2 class="hero-subtitle" data-aos="fade-up" data-aos-delay="200">Technical Professional & Web Developer</h2>
+            <p class="hero-description" data-aos="fade-up" data-aos-delay="400">
+                Passionate web developer hungry for growth! I build responsive websites & web apps with modern technologies,
+                optimize performance, and create scalable solutions that exceed client expectations.
+            </p>
+            <div class="cta-buttons" data-aos="fade-up" data-aos-delay="600">
+                <a href="#contact" class="btn btn-primary">
+                    <i class="fas fa-envelope"></i>
+                    Get In Touch
+                </a>
+                <a href="#" class="btn btn-secondary" id="downloadResume">
+                    <i class="fas fa-download"></i>
+                    Download Resume
+                </a>
+            </div>
+            <div class="social-links" data-aos="fade-up" data-aos-delay="800">
+                <a href="https://linkedin.com/in/durgaraj-chauhan" class="social-link" target="_blank">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="https://github.com/DurgarajC07" class="social-link" target="_blank">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="https://twitter.com/DurgarajChauhan" class="social-link" target="_blank">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="mailto:durgarajchauhan@gmail.com" class="social-link">
+                    <i class="fas fa-envelope"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <h2 class="section-title" data-aos="fade-up">About Me</h2>
+        <div class="card" data-aos="fade-up" data-aos-delay="200">
+            <p style="font-size: 1.1rem; line-height: 1.8; text-align: center;">
+                I'm a motivated and accomplished technical professional with a passion for innovation and problem-solving. 
+                Currently working as a Sr. Software Engineer at Anvex AI Technologies, I specialize in building scalable web applications, 
+                REST APIs, and AI-powered solutions. With expertise in JavaScript, Python, PHP, and cloud technologies, 
+                I'm dedicated to delivering high-quality solutions that make a real impact.
+            </p>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid" data-aos="fade-up" data-aos-delay="400">
+            <div class="stat-card">
+                <div class="stat-number" data-count="2">0</div>
+                <div class="stat-label">Years Experience</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" data-count="15">0</div>
+                <div class="stat-label">Projects Completed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" data-count="3">0</div>
+                <div class="stat-label">Employee of the Month</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" data-count="10">0</div>
+                <div class="stat-label">Technologies Mastered</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="section">
+        <h2 class="section-title" data-aos="fade-up">Work Experience</h2>
+        <div class="timeline">
+            <div class="timeline-item" data-aos="fade-right">
+                <div class="timeline-content">
+                    <h3 style="color: #667eea; font-size: 1.3rem; margin-bottom: 0.5rem;">Sr. Software Engineer</h3>
+                    <h4 style="color: var(--text-secondary); margin-bottom: 1rem;">Anvex AI Technologies | Jan 2025 - Present</h4>
+                    <p>Currently developing accounting software, RESTful APIs, implementing GitHub Actions for CI/CD, 
+                    managing web hosting solutions, and building advanced chatbots and AI agents.</p>
+                    <div class="skill-tags" style="justify-content: flex-start; margin-top: 1rem;">
+                        <span class="skill-tag">AI Agents</span>
+                        <span class="skill-tag">RESTful APIs</span>
+                        <span class="skill-tag">GitHub Actions</span>
+                        <span class="skill-tag">Chatbots</span>
+                    </div>
+                </div>
+            </div>
+            <div class="timeline-item" data-aos="fade-right" data-aos-delay="200">
+                <div class="timeline-content">
+                    <h3 style="color: #667eea; font-size: 1.3rem; margin-bottom: 0.5rem;">Jr. Web Developer</h3>
+                    <h4 style="color: var(--text-secondary); margin-bottom: 1rem;">Reboot Technology Pvt LTD | Jun 2023 - Jan 2025</h4>
+                    <p>Developed web projects including DocuSign API integration, screen recorder applications, 
+                    Twilio API for two-factor authentication, video thumbnail generation using FFmpeg, and payment gateway integrations.</p>
+                    <div class="skill-tags" style="justify-content: flex-start; margin-top: 1rem;">
+                        <span class="skill-tag">DocuSign API</span>
+                        <span class="skill-tag">Twilio</span>
+                        <span class="skill-tag">FFmpeg</span>
+                        <span class="skill-tag">Stripe</span>
+                        <span class="skill-tag">Laravel</span>
+                    </div>
+                    <div style="margin-top: 1rem; padding: 1rem; background: var(--success-gradient); border-radius: 10px; color: white;">
+                        <i class="fas fa-trophy"></i> 3x Employee of the Month - Outstanding performance and exceeding expectations
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section">
+        <h2 class="section-title" data-aos="fade-up">Featured Projects</h2>
+        <div class="projects-grid">
+            <div class="project-card" data-aos="fade-up">
+                <div class="project-image">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="project-content">
+                    <h3 style="color: #667eea; margin-bottom: 1rem;">Insurance Website with AI</h3>
+                    <p>Developed an intelligent insurance platform using Python API for automatic damage detection 
+                    and report generation with estimation pricing, policy details, and vehicle information.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">AI/ML</span>
+                        <span class="tech-tag">Computer Vision</span>
+                        <span class="tech-tag">REST API</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="project-image">
+                    <i class="fas fa-coins"></i>
+                </div>
+                <div class="project-content">
+                    <h3 style="color: #667eea; margin-bottom: 1rem;">NFT Marketplace</h3>
+                    <p>Built a decentralized NFT marketplace using blockchain technology with smart contracts 
+                    for secure trading and ownership verification.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Blockchain</span>
+                        <span class="tech-tag">Smart Contracts</span>
+                        <span class="tech-tag">Web3</span>
+                        <span class="tech-tag">JavaScript</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card" data-aos="fade-up" data-aos-delay="400">
+                <div class="project-image">
+                    <i class="fas fa-wrench"></i>
+                </div>
+                <div class="project-content">
+                    <h3 style="color: #667eea; margin-bottom: 1rem;">QuickMech Platform</h3>
+                    <p>Developed a comprehensive mechanic booking platform using Laravel with real-time 
+                    service scheduling, payment integration, and customer management system.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Laravel</span>
+                        <span class="tech-tag">PHP</span>
+                        <span class="tech-tag">MySQL</span>
+                        <span class="tech-tag">Payment Gateway</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card" data-aos="fade-up" data-aos-delay="600">
+                <div class="project-image">
+                    <i class="fas fa-cogs"></i>
+                </div>
+                <div class="project-content">
+                    <h3 style="color: #667eea; margin-bottom: 1rem;">Content Management System</h3>
+                    <p>Built a dynamic CMS allowing clients to manage website content seamlessly through 
+                    an intuitive admin interface with real-time updates.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">CMS</span>
+                        <span class="tech-tag">Admin Panel</span>
+                        <span class="tech-tag">Dynamic Content</span>
+                        <span class="tech-tag">Real-time Updates</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card" data-aos="fade-up" data-aos-delay="800">
+                <div class="project-image">
+                    <i class="fas fa-film"></i>
+                </div>
+                <div class="project-content">
+                    <h3 style="color: #667eea; margin-bottom: 1rem;">Movie Search Platform</h3>
+                    <p>Created a React-based movie search website with REST API integration, 
+                    featuring dynamic search, filtering, and detailed movie information display.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">React.js</span>
+                        <span class="tech-tag">REST API</span>
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">Responsive Design</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card" data-aos="fade-up" data-aos-delay="1000">
+                <div class="project-image">
+                    <i class="fas fa-calculator"></i>
+                </div>
+                <div class="project-content">
+                    <h3 style="color: #667eea; margin-bottom: 1rem;">Technical Calculators Suite</h3>
+                    <p>Developed a collection of specialized calculators including IP subnet, streaming bitrate, 
+                    video size, frame size, and RAID calculators for technical professionals.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">Mathematical Algorithms</span>
+                        <span class="tech-tag">Web Development</span>
+                        <span class="tech-tag">Utility Tools</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="section">
+        <h2 class="section-title" data-aos="fade-up">Technical Skills</h2>
+        <div class="skills-grid">
+            <div class="skill-category" data-aos="fade-up">
+                <div class="skill-icon">
+                    <i class="fab fa-js-square"></i>
+                </div>
+                <h3>Frontend Development</h3>
+                <div class="skill-tags">
+                    <span class="skill-tag">JavaScript</span>
+                    <span class="skill-tag">React.js</span>
+                    <span class="skill-tag">Angular</span>
+                    <span class="skill-tag">Vue.js</span>
+                    <span class="skill-tag">Tailwind CSS</span>
+                    <span class="skill-tag">Bootstrap</span>
+                </div>
+            </div>
+
+            <div class="skill-category" data-aos="fade-up" data-aos-delay="200">
+                <div class="skill-icon">
+                    <i class="fas fa-server"></i>
+                </div>
+                <h3>Backend Development</h3>
+                <div class="skill-tags">
+                    <span class="skill-tag">Node.js</span>
+                    <span class="skill-tag">Express.js</span>
+                    <span class="skill-tag">Python</span>
+                    <span class="skill-tag">Flask</span>
+                    <span class="skill-tag">FastAPI</span>
+                    <span class="skill-tag">PHP</span>
+                    <span class="skill-tag">Laravel</span>
+                </div>
+            </div>
+
+            <div class="skill-category" data-aos="fade-up" data-aos-delay="400">
+                <div class="skill-icon">
+                    <i class="fas fa-database"></i>
+                </div>
+                <h3>Database & Storage</h3>
+                <div class="skill-tags">
+                    <span class="skill-tag">MySQL</span>
+                    <span class="skill-tag">Firebase</span>
+                    <span class="skill-tag">MongoDB</span>
+                    <span class="skill-tag">AWS S3</span>
+                </div>
+            </div>
+
+            <div class="skill-category" data-aos="fade-up" data-aos-delay="600">
+                <div class="skill-icon">
+                    <i class="fas fa-cloud"></i>
+                </div>
+                <h3>Cloud & DevOps</h3>
+                <div class="skill-tags">
+                    <span class="skill-tag">AWS</span>
+                    <span class="skill-tag">Azure</span>
+                    <span class="skill-tag">Docker</span>
+                    <span class="skill-tag">CI/CD</span>
+                    <span class="skill-tag">GitHub Actions</span>
+                    <span class="skill-tag">Bitbucket</span>
+                </div>
+            </div>
+
+            <div class="skill-category" data-aos="fade-up" data-aos-delay="800">
+                <div class="skill-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h3>AI & Integration</h3>
+                <div class="skill-tags">
+                    <span class="skill-tag">AI Agents</span>
+                    <span class="skill-tag">RESTful APIs</span>
+                    <span class="skill-tag">WebSockets</span>
+                    <span class="skill-tag">Chatbots</span>
+                    <span class="skill-tag">Machine Learning</span>
+                </div>
+            </div>
+
+            <div class="skill-category" data-aos="fade-up" data-aos-delay="1000">
+                <div class="skill-icon">
+                    <i class="fas fa-tools"></i>
+                </div>
+                <h3>Tools & Others</h3>
+                <div class="skill-tags">
+                    <span class="skill-tag">Postman</span>
+                    <span class="skill-tag">Git</span>
+                    <span class="skill-tag">Blockchain</span>
+                    <span class="skill-tag">Payment Gateways</span>
+                    <span class="skill-tag">API Integration</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section class="section">
+        <h2 class="section-title" data-aos="fade-up">Education</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem;">
+            <div class="card" data-aos="fade-up">
+                <h3 style="color: #667eea; margin-bottom: 1rem;">Bachelor of Engineering</h3>
+                <h4 style="color: var(--text-secondary); margin-bottom: 0.5rem;">Computer Engineering</h4>
+                <p style="margin-bottom: 0.5rem;"><strong>Saraswati College of Engineering, Kharghar</strong></p>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">08/2020 - 06/2023 | 78.34%</p>
+                <p>Key Projects: NFT Marketplace using Blockchain, QuickMech Website in Laravel, 
+                Cognitive Service Application in Xamarin using Azure Cloud Computing.</p>
+            </div>
+
+            <div class="card" data-aos="fade-up" data-aos-delay="200">
+                <h3 style="color: #667eea; margin-bottom: 1rem;">Diploma</h3>
+                <h4 style="color: var(--text-secondary); margin-bottom: 0.5rem;">Computer Engineering</h4>
+                <p style="margin-bottom: 0.5rem;"><strong>Saraswati Institute of Technology, Kharghar</strong></p>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">08/2017 - 07/2020 | 90.91%</p>
+                <p>Key Projects: Student Learning Application in Xamarin, Note Application using Google Firebase in Android Studio.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+        <h2 class="section-title" data-aos="fade-up">Get In Touch</h2>
+        <div class="contact-form" data-aos="fade-up" data-aos-delay="200">
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <input type="text" id="subject" name="subject" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-paper-plane"></i>
+                    Send Message
+                </button>
+            </form>
+        </div>
+
+        <!-- Contact Info -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 3rem;">
+            <div class="card" data-aos="fade-up" data-aos-delay="400" style="text-align: center;">
+                <div style="font-size: 2rem; color: #667eea; margin-bottom: 1rem;">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <h3>Email</h3>
+                <p style="color: var(--text-secondary);">durgarajchauhan@gmail.com</p>
+            </div>
+
+            <div class="card" data-aos="fade-up" data-aos-delay="600" style="text-align: center;">
+                <div style="font-size: 2rem; color: #667eea; margin-bottom: 1rem;">
+                    <i class="fas fa-phone"></i>
+                </div>
+                <h3>Phone</h3>
+                <p style="color: var(--text-secondary);">+91 8268874907</p>
+            </div>
+
+            <div class="card" data-aos="fade-up" data-aos-delay="800" style="text-align: center;">
+                <div style="font-size: 2rem; color: #667eea; margin-bottom: 1rem;">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <h3>Location</h3>
+                <p style="color: var(--text-secondary);">Mumbai, India</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="section">
+            <p style="color: var(--text-secondary);">
+                © 2025 Durgaraj Chauhan. Built with passion and modern web technologies.
+            </p>
+            <div class="social-links">
+                <a href="https://linkedin.com/in/durgaraj-chauhan" class="social-link" target="_blank">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="https://github.com/DurgarajC07" class="social-link" target="_blank">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="https://twitter.com/DurgarajChauhan" class="social-link" target="_blank">
+                    <i class="fab fa-twitter"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Chatbot -->
+    <div class="chatbot-container">
+        <div class="chatbot-window" id="chatbotWindow">
+            <div class="chatbot-header">
+                <i class="fas fa-robot"></i> Ask me about Durgaraj
+            </div>
+            <div class="chatbot-messages" id="chatbotMessages">
+                <div class="message bot">
+                    Hi! I'm Durgaraj's AI assistant. Ask me anything about his experience, skills, or projects!
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chatInput" placeholder="Ask about my experience..." maxlength="500">
+                <button id="sendMessage">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+        <button class="chatbot-toggle" id="chatbotToggle">
+            <i class="fas fa-comments"></i>
+        </button>
+    </div>
+
+    <!-- External Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script>
+        // Configuration - Replace with your actual API keys
+        const CONFIG = {
+            GEMINI_API_KEY: 'YOUR_GEMINI_API_KEY_HERE', // Replace with your Gemini API key
+            EMAILJS_PUBLIC_KEY: 'YOUR_EMAILJS_PUBLIC_KEY', // Replace with your EmailJS public key
+            EMAILJS_SERVICE_ID: 'YOUR_SERVICE_ID', // Replace with your EmailJS service ID
+            EMAILJS_TEMPLATE_ID: 'YOUR_TEMPLATE_ID' // Replace with your EmailJS template ID
+        };
+
+        // Resume data for AI chatbot
+        const RESUME_DATA = {
+            name: "Durgaraj Chauhan",
+            title: "Technical Professional & Web Developer",
+            email: "durgarajchauhan@gmail.com",
+            phone: "+91 8268874907",
+            location: "Mumbai, India",
+            linkedin: "linkedin.com/in/durgaraj-chauhan",
+            github: "github.com/DurgarajC07",
+            twitter: "@DurgarajChauhan",
+            
+            experience: [
+                {
+                    title: "Sr. Software Engineer",
+                    company: "Anvex AI Technologies",
+                    period: "Jan 2025 - Present",
+                    description: "Working on accounting software, RESTful APIs, GitHub Actions, web hosting, chatbots, and AI agents"
+                },
+                {
+                    title: "Jr. Web Developer",
+                    company: "Reboot Technology Pvt LTD",
+                    period: "Jun 2023 - Jan 2025",
+                    description: "Developed web projects including DocuSign API integration, screen recorder, Twilio API, payment gateways",
+                    achievements: "3x Employee of the Month for outstanding performance"
+                }
+            ],
+            
+            education: [
+                {
+                    degree: "Bachelor of Engineering - Computer Engineering",
+                    institution: "Saraswati College of Engineering, Kharghar",
+                    period: "08/2020 - 06/2023",
+                    percentage: "78.34%"
+                },
+                {
+                    degree: "Diploma - Computer Engineering",
+                    institution: "Saraswati Institute of Technology, Kharghar",
+                    period: "08/2017 - 07/2020",
+                    percentage: "90.91%"
+                }
+            ],
+            
+            skills: [
+                "JavaScript", "React.js", "Angular", "Vue.js", "Node.js", "Express.js",
+                "Python", "Flask", "FastAPI", "Django", "PHP", "Laravel", "MySQL",
+                "Firebase", "AWS", "Azure", "Docker", "CI/CD", "GitHub Actions",
+                "RESTful APIs", "WebSockets", "AI Agents", "Blockchain"
+            ],
+            
+            projects: [
+                {
+                    name: "Insurance Website with AI",
+                    description: "Python API for auto damage detection and report generation with pricing estimation"
+                },
+                {
+                    name: "NFT Marketplace",
+                    description: "Blockchain-based marketplace with smart contracts"
+                },
+                {
+                    name: "QuickMech Platform",
+                    description: "Mechanic booking platform built with Laravel"
+                },
+                {
+                    name: "Content Management System",
+                    description: "Dynamic CMS for content management"
+                }
+            ],
+            
+            languages: ["English (Professional)", "Hindi (Native)", "Marathi (Professional)"],
+            interests: ["Playing Cricket", "Music", "Travelling", "Anime"]
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize AOS
+            AOS.init({
+                duration: 1000,
+                easing: 'ease-in-out',
+                once: true
+            });
+
+            // Theme Toggle
+            const themeToggle = document.getElementById('themeToggle');
+            const html = document.documentElement;
+            
+            // Load saved theme
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            html.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = html.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                html.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateThemeIcon(newTheme);
+            });
+
+            function updateThemeIcon(theme) {
+                const icon = themeToggle.querySelector('i');
+                icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            }
+
+            // Smooth Scrolling
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Progress Bar
+            window.addEventListener('scroll', updateProgressBar);
+            
+            function updateProgressBar() {
+                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (winScroll / height) * 100;
+                document.getElementById('progressBar').style.width = scrolled + '%';
+            }
+
+            // Counter Animation
+            const counters = document.querySelectorAll('[data-count]');
+            const animateCounters = () => {
+                counters.forEach(counter => {
+                    const target = parseInt(counter.getAttribute('data-count'));
+                    const count = parseInt(counter.innerText);
+                    const increment = target / 100;
+                    
+                    if (count < target) {
+                        counter.innerText = Math.ceil(count + increment);
+                        setTimeout(animateCounters, 20);
+                    } else {
+                        counter.innerText = target;
+                    }
+                });
+            };
+
+            // Trigger counter animation when in view
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateCounters();
+                        observer.unobserve(entry.target);
+                    }
+                });
+            });
+
+            document.querySelector('.stats-grid').addEventListener('mouseenter', () => {
+                observer.observe(document.querySelector('.stats-grid'));
+            }, { once: true });
+
+            // Particle Animation
+            createParticles();
+            
+            function createParticles() {
+                const particlesContainer = document.getElementById('particles');
+                
+                setInterval(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.left = Math.random() * 100 + 'vw';
+                    particle.style.animationDelay = Math.random() * 2 + 's';
+                    particle.style.animationDuration = (Math.random() * 3 + 5) + 's';
+                    
+                    particlesContainer.appendChild(particle);
+                    
+                    setTimeout(() => {
+                        particle.remove();
+                    }, 8000);
+                }, 2000);
+            }
+
+            // Chatbot Functionality
+            setupChatbot();
+            
+            function setupChatbot() {
+                const toggle = document.getElementById('chatbotToggle');
+                const window = document.getElementById('chatbotWindow');
+                const input = document.getElementById('chatInput');
+                const sendBtn = document.getElementById('sendMessage');
+                const messages = document.getElementById('chatbotMessages');
+
+                toggle.addEventListener('click', () => {
+                    const isOpen = window.style.display === 'flex';
+                    window.style.display = isOpen ? 'none' : 'flex';
+                    toggle.innerHTML = isOpen ? '<i class="fas fa-comments"></i>' : '<i class="fas fa-times"></i>';
+                });
+
+                sendBtn.addEventListener('click', sendMessage);
+                input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        sendMessage();
+                    }
+                });
+
+                async function sendMessage() {
+                    const message = input.value.trim();
+                    if (!message) return;
+
+                    // Add user message
+                    addMessage(message, 'user');
+                    input.value = '';
+
+                    // Add loading message
+                    const loadingMsg = addMessage('<div class="loading"></div>', 'bot');
+
+                    try {
+                        const response = await getBotResponse(message);
+                        loadingMsg.innerHTML = response;
+                    } catch (error) {
+                        loadingMsg.innerHTML = "I'm having trouble connecting right now. Please try again later or contact Durgaraj directly!";
+                    }
+                }
+
+                function addMessage(text, sender) {
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = `message ${sender}`;
+                    messageDiv.innerHTML = text;
+                    messages.appendChild(messageDiv);
+                    messages.scrollTop = messages.scrollHeight;
+                    return messageDiv;
+                }
+
+                async function getBotResponse(userMessage) {
+                    // Simple keyword-based responses for demo
+                    const message = userMessage.toLowerCase();
+                    
+                    if (message.includes('experience') || message.includes('work')) {
+                        return `Durgaraj has 2+ years of experience. He's currently a Sr. Software Engineer at Anvex AI Technologies (Jan 2025-Present) working on AI agents and accounting software. Previously, he was a Jr. Web Developer at Reboot Technology (Jun 2023-Jan 2025) where he won Employee of the Month 3 times!`;
+                    }
+                    
+                    if (message.includes('skills') || message.includes('technology')) {
+                        return `Durgaraj is skilled in JavaScript (React, Angular, Vue), Python (Flask, FastAPI), PHP (Laravel), Node.js, cloud technologies (AWS, Azure), Docker, and AI agents. He's also experienced with payment gateways, API integrations, and blockchain development.`;
+                    }
+                    
+                    if (message.includes('project')) {
+                        return `Some of Durgaraj's notable projects include: an AI-powered insurance website with damage detection, NFT marketplace using blockchain, QuickMech mechanic booking platform, and various technical calculators. He's also built screen recording tools and content management systems.`;
+                    }
+                    
+                    if (message.includes('education')) {
+                        return `Durgaraj has a Bachelor of Engineering in Computer Engineering from Saraswati College of Engineering (78.34%) and a Diploma from Saraswati Institute of Technology (90.91%). He's also certified in Laravel, Python, Blockchain, and MVC Architecture.`;
+                    }
+                    
+                    if (message.includes('contact') || message.includes('hire') || message.includes('email')) {
+                        return `You can reach Durgaraj at durgarajchauhan@gmail.com or +91 8268874907. He's based in Mumbai, India and is always excited about new opportunities and collaborations!`;
+                    }
+                    
+                    if (message.includes('hello') || message.includes('hi')) {
+                        return `Hello! I'm here to help you learn more about Durgaraj Chauhan. He's a passionate web developer with expertise in full-stack development, AI, and cloud technologies. What would you like to know?`;
+                    }
+                    
+                    // For Gemini API integration (replace with actual implementation)
+                    if (CONFIG.GEMINI_API_KEY && CONFIG.GEMINI_API_KEY !== 'YOUR_GEMINI_API_KEY_HERE') {
+                        try {
+                            const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=' + CONFIG.GEMINI_API_KEY, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    contents: [{
+                                        parts: [{
+                                            text: `Based on this resume data: ${JSON.stringify(RESUME_DATA)}, answer this question about Durgaraj Chauhan: ${userMessage}`
+                                        }]
+                                    }]
+                                })
+                            });
+                            
+                            const data = await response.json();
+                            return data.candidates[0].content.parts[0].text;
+                        } catch (error) {
+                            console.error('Gemini API error:', error);
+                        }
+                    }
+                    
+                    return `That's an interesting question! Durgaraj is a versatile developer with experience in full-stack development, AI integration, and cloud technologies. For specific details, feel free to contact him directly at durgarajchauhan@gmail.com or ask about his experience, skills, projects, or education.`;
+                }
+            }
+
+            // Contact Form
+            setupContactForm();
+            
+            function setupContactForm() {
+                const form = document.getElementById('contactForm');
+                
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    
+                    const formData = new FormData(form);
+                    const data = Object.fromEntries(formData);
+                    
+                    const submitBtn = form.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.innerHTML;
+                    
+                    submitBtn.innerHTML = '<div class="loading"></div> Sending...';
+                    submitBtn.disabled = true;
+                    
+                    try {
+                        // Simple mailto fallback
+                        const subject = encodeURIComponent(data.subject);
+                        const body = encodeURIComponent(`From: ${data.name}\nEmail: ${data.email}\n\nMessage:\n${data.message}`);
+                        window.location.href = `mailto:durgarajchauhan@gmail.com?subject=${subject}&body=${body}`;
+                        
+                        // Reset form
+                        form.reset();
+                        alert('Email client opened! Please send the email from your default email application.');
+                        
+                    } catch (error) {
+                        alert('Please contact directly at durgarajchauhan@gmail.com');
+                    } finally {
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                    }
+                });
+            }
+
+            // Resume Download
+            setupResumeDownload();
+            
+            function setupResumeDownload() {
+                const downloadBtn = document.getElementById('downloadResume');
+                
+                downloadBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    generatePDF();
+                });
+                
+                function generatePDF() {
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF();
+                    
+                    // Header
+                    doc.setFontSize(24);
+                    doc.setTextColor(102, 126, 234);
+                    doc.text('Durgaraj Chauhan', 20, 25);
+                    
+                    doc.setFontSize(14);
+                    doc.setTextColor(0, 0, 0);
+                    doc.text('Technical Professional & Web Developer', 20, 35);
+                    
+                    // Contact Info
+                    doc.setFontSize(10);
+                    doc.text('Email: durgarajchauhan@gmail.com | Phone: +91 8268874907 | Location: Mumbai, India', 20, 45);
+                    doc.text('LinkedIn: linkedin.com/in/durgaraj-chauhan | GitHub: github.com/DurgarajC07', 20, 52);
+                    
+                    // Summary
+                    doc.setFontSize(12);
+                    doc.setTextColor(102, 126, 234);
+                    doc.text('PROFESSIONAL SUMMARY', 20, 65);
+                    doc.setTextColor(0, 0, 0);
+                    doc.setFontSize(10);
+                    const summary = 'Motivated and accomplished technical professional with passion for innovation and problem-solving. Built responsive websites & web apps with JavaScript, Python, PHP, and cloud technologies. Optimized performance, boosted engagement and built scalable solutions.';
+                    const summaryLines = doc.splitTextToSize(summary, 170);
+                    doc.text(summaryLines, 20, 75);
+                    
+                    // Experience
+                    let yPos = 95;
+                    doc.setFontSize(12);
+                    doc.setTextColor(102, 126, 234);
+                    doc.text('WORK EXPERIENCE', 20, yPos);
+                    yPos += 10;
+                    
+                    doc.setFontSize(11);
+                    doc.setTextColor(0, 0, 0);
+                    doc.text('Sr. Software Engineer - Anvex AI Technologies', 20, yPos);
+                    yPos += 7;
+                    doc.setFontSize(9);
+                    doc.setTextColor(100, 100, 100);
+                    doc.text('Jan 2025 - Present', 20, yPos);
+                    yPos += 7;
+                    doc.setTextColor(0, 0, 0);
+                    doc.text('• Working on accounting software, RESTful APIs, GitHub Actions, web hosting, chatbots, and AI agents', 25, yPos);
+                    yPos += 15;
+                    
+                    doc.setFontSize(11);
+                    doc.setTextColor(0, 0, 0);
+                    doc.text('Jr. Web Developer - Reboot Technology Pvt LTD', 20, yPos);
+                    yPos += 7;
+                    doc.setFontSize(9);
+                    doc.setTextColor(100, 100, 100);
+                    doc.text('Jun 2023 - Jan 2025', 20, yPos);
+                    yPos += 7;
+                    doc.setTextColor(0, 0, 0);
+                    doc.text('• DocuSign API Integration, Screen Recorder, Twilio API, Payment Gateways (Stripe, Razorpay)', 25, yPos);
+                    yPos += 5;
+                    doc.text('• 3x Employee of the Month for outstanding performance and exceeding expectations', 25, yPos);
+                    yPos += 15;
+                    
+                    // Education
+                    doc.setFontSize(12);
+                    doc.setTextColor(102, 126, 234);
+                    doc.text('EDUCATION', 20, yPos);
+                    yPos += 10;
+                    
+                    doc.setFontSize(11);
+                    doc.setTextColor(0, 0, 0);
+                    doc.text('Bachelor of Engineering - Computer Engineering', 20, yPos);
+                    yPos += 7;
+                    doc.setFontSize(9);
+                    doc.text('Saraswati College of Engineering, Kharghar | 08/2020 - 06/2023 | 78.34%', 20, yPos);
+                    yPos += 10;
+                    
+                    doc.setFontSize(11);
+                    doc.text('Diploma - Computer Engineering', 20, yPos);
+                    yPos += 7;
+                    doc.setFontSize(9);
+                    doc.text('Saraswati Institute of Technology, Kharghar | 08/2017 - 07/2020 | 90.91%', 20, yPos);
+                    yPos += 15;
+                    
+                    // Skills
+                    doc.setFontSize(12);
+                    doc.setTextColor(102, 126, 234);
+                    doc.text('TECHNICAL SKILLS', 20, yPos);
+                    yPos += 10;
+                    
+                    doc.setFontSize(10);
+                    doc.setTextColor(0, 0, 0);
+                    const skills = 'JavaScript, React.js, Angular, Vue.js, Node.js, Express.js, Python, Flask, FastAPI, PHP, Laravel, MySQL, Firebase, AWS, Azure, Docker, CI/CD, GitHub Actions, RESTful APIs, WebSockets, AI Agents, Blockchain';
+                    const skillLines = doc.splitTextToSize(skills, 170);
+                    doc.text(skillLines, 20, yPos);
+                    
+                    // Save PDF
+                    doc.save('Durgaraj_Chauhan_Resume.pdf');
+                }
+            }
+
+            // Mobile Menu (basic implementation)
+            const mobileToggle = document.querySelector('.mobile-menu-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            
+            mobileToggle.addEventListener('click', () => {
+                navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            });
+
+            // Typing Effect for Hero
+            typeWriter();
+            
+            function typeWriter() {
+                const text = "Web Developer, hungry for growth!";
+                const subtitle = document.querySelector('.hero-subtitle');
+                let i = 0;
+                
+                function type() {
+                    if (i < text.length) {
+                        subtitle.innerHTML = text.substring(0, i + 1) + '<span style="opacity: 0.7;">|</span>';
+                        i++;
+                        setTimeout(type, 100);
+                    } else {
+                        setTimeout(() => {
+                            subtitle.innerHTML = text;
+                        }, 500);
+                    }
+                }
+                
+                setTimeout(type, 2000);
+            }
+
+            // Easter Egg - Konami Code
+            let konamiCode = [];
+            const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA'];
+            
+            document.addEventListener('keydown', (e) => {
+                konamiCode.push(e.code);
+                if (konamiCode.length > konamiSequence.length) {
+                    konamiCode.shift();
+                }
+                
+                if (konamiCode.join(',') === konamiSequence.join(',')) {
+                    triggerEasterEgg();
+                    konamiCode = [];
+                }
+            });
+            
+            function triggerEasterEgg() {
+                // Fun animation
+                document.body.style.animation = 'rainbow 2s ease-in-out';
+                setTimeout(() => {
+                    document.body.style.animation = '';
+                    alert('🎉 Easter Egg Found! You discovered the secret code! Durgaraj loves attention to detail just like this!');
+                }, 2000);
+            }
+
+            // Add rainbow animation for easter egg
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes rainbow {
+                    0% { filter: hue-rotate(0deg); }
+                    25% { filter: hue-rotate(90deg); }
+                    50% { filter: hue-rotate(180deg); }
+                    75% { filter: hue-rotate(270deg); }
+                    100% { filter: hue-rotate(360deg); }
+                }
+            `;
+            document.head.appendChild(style);
+
+            // Add some interactive elements
+            addInteractiveElements();
+            
+            function addInteractiveElements() {
+                // Magnetic effect for buttons
+                const buttons = document.querySelectorAll('.btn');
+                
+                buttons.forEach(btn => {
+                    btn.addEventListener('mousemove', (e) => {
+                        const rect = btn.getBoundingClientRect();
+                        const x = e.clientX - rect.left - rect.width / 2;
+                        const y = e.clientY - rect.top - rect.height / 2;
+                        
+                        btn.style.transform = `translate(${x * 0.1}px, ${y * 0.1}px) translateY(-3px)`;
+                    });
+                    
+                    btn.addEventListener('mouseleave', () => {
+                        btn.style.transform = 'translateY(-3px)';
+                    });
+                });
+
+                // Parallax effect for cards - REMOVED to prevent overlapping issues
+                /*
+                window.addEventListener('scroll', () => {
+                    const scrolled = window.pageYOffset;
+                    const cards = document.querySelectorAll('.card');
+                    
+                    cards.forEach((card, index) => {
+                        const speed = 0.5 + (index * 0.1);
+                        card.style.transform = `translateY(${scrolled * speed * 0.1}px)`;
+                    });
+                });
+                */
+
+                // Glitch effect on logo
+                const logo = document.querySelector('.logo');
+                logo.addEventListener('click', () => {
+                    logo.style.animation = 'glitch 0.5s ease-in-out';
+                    setTimeout(() => {
+                        logo.style.animation = '';
+                    }, 500);
+                });
+
+                // Add glitch animation
+                const glitchStyle = document.createElement('style');
+                glitchStyle.textContent = `
+                    @keyframes glitch {
+                        0% { transform: translate(0); }
+                        20% { transform: translate(-2px, 2px); }
+                        40% { transform: translate(-2px, -2px); }
+                        60% { transform: translate(2px, 2px); }
+                        80% { transform: translate(2px, -2px); }
+                        100% { transform: translate(0); }
+                    }
+                `;
+                document.head.appendChild(glitchStyle);
+            }
+
+            // Cursor Trail Effect
+            createCursorTrail();
+            
+            function createCursorTrail() {
+                const trail = [];
+                const trailLength = 20;
+                
+                document.addEventListener('mousemove', (e) => {
+                    trail.push({ x: e.clientX, y: e.clientY });
+                    
+                    if (trail.length > trailLength) {
+                        trail.shift();
+                    }
+                    
+                    // Remove existing trail dots
+                    document.querySelectorAll('.trail-dot').forEach(dot => dot.remove());
+                    
+                    // Create new trail dots
+                    trail.forEach((point, index) => {
+                        const dot = document.createElement('div');
+                        dot.className = 'trail-dot';
+                        dot.style.cssText = `
+                            position: fixed;
+                            width: ${index * 2}px;
+                            height: ${index * 2}px;
+                            background: rgba(102, 126, 234, ${index / trailLength});
+                            border-radius: 50%;
+                            pointer-events: none;
+                            z-index: 9999;
+                            left: ${point.x - index}px;
+                            top: ${point.y - index}px;
+                            transition: all 0.1s ease;
+                        `;
+                        document.body.appendChild(dot);
+                        
+                        setTimeout(() => dot.remove(), 1000);
+                    });
+                });
+            }
+
+            // Achievement Notifications
+            showAchievementNotifications();
+            
+            function showAchievementNotifications() {
+                const achievements = [
+                    { icon: 'fas fa-trophy', text: '3x Employee of the Month', delay: 3000 },
+                    { icon: 'fas fa-graduation-cap', text: 'Bachelor of Engineering - 78.34%', delay: 6000 },
+                    { icon: 'fas fa-code', text: '15+ Projects Completed', delay: 9000 }
+                ];
+                
+                achievements.forEach(achievement => {
+                    setTimeout(() => {
+                        showNotification(achievement.icon, achievement.text);
+                    }, achievement.delay);
+                });
+            }
+            
+            function showNotification(icon, text) {
+                const notification = document.createElement('div');
+                notification.innerHTML = `
+                    <div style="
+                        position: fixed;
+                        top: 100px;
+                        right: 20px;
+                        background: var(--primary-gradient);
+                        color: white;
+                        padding: 1rem 1.5rem;
+                        border-radius: 10px;
+                        box-shadow: var(--shadow);
+                        z-index: 10000;
+                        animation: slideInRight 0.5s ease, slideOutRight 0.5s ease 3s forwards;
+                    ">
+                        <i class="${icon}"></i> ${text}
+                    </div>
+                `;
+                
+                document.body.appendChild(notification);
+                
+                // Add animation styles
+                const notificationStyle = document.createElement('style');
+                notificationStyle.textContent = `
+                    @keyframes slideInRight {
+                        from { transform: translateX(100%); opacity: 0; }
+                        to { transform: translateX(0); opacity: 1; }
+                    }
+                    @keyframes slideOutRight {
+                        from { transform: translateX(0); opacity: 1; }
+                        to { transform: translateX(100%); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(notificationStyle);
+                
+                setTimeout(() => {
+                    notification.remove();
+                    notificationStyle.remove();
+                }, 4000);
+            }
+
+            // Loading Screen (optional)
+            createLoadingScreen();
+            
+            function createLoadingScreen() {
+                const loader = document.createElement('div');
+                loader.innerHTML = `
+                    <div style="
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: var(--bg-primary);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        z-index: 10000;
+                        transition: opacity 0.5s ease;
+                    " id="loadingScreen">
+                        <div style="text-align: center;">
+                            <div style="
+                                width: 50px;
+                                height: 50px;
+                                border: 3px solid var(--border-color);
+                                border-top: 3px solid #667eea;
+                                border-radius: 50%;
+                                animation: spin 1s linear infinite;
+                                margin: 0 auto 1rem;
+                            "></div>
+                            <p style="color: var(--text-secondary);">Loading Portfolio...</p>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.appendChild(loader);
+                
+                // Hide loader after page loads
+                window.addEventListener('load', () => {
+                    setTimeout(() => {
+                        const loadingScreen = document.getElementById('loadingScreen');
+                        loadingScreen.style.opacity = '0';
+                        setTimeout(() => {
+                            loadingScreen.remove();
+                        }, 500);
+                    }, 1500);
+                });
+            }
+
+            // Scroll animations for navbar
+            let lastScrollTop = 0;
+            window.addEventListener('scroll', () => {
+                const navbar = document.querySelector('.navbar');
+                const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+                
+                if (currentScroll > lastScrollTop && currentScroll > 100) {
+                    navbar.style.transform = 'translateY(-100%)';
+                } else {
+                    navbar.style.transform = 'translateY(0)';
+                }
+                lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+            });
+
+            // Add floating action buttons
+            createFloatingActions();
+            
+            function createFloatingActions() {
+                const fab = document.createElement('div');
+                fab.innerHTML = `
+                    <div style="
+                        position: fixed;
+                        bottom: 100px;
+                        left: 2rem;
+                        z-index: 999;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 1rem;
+                    ">
+                        <a href="#home" style="
+                            width: 50px;
+                            height: 50px;
+                            background: var(--accent-gradient);
+                            border-radius: 50%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            color: white;
+                            text-decoration: none;
+                            box-shadow: var(--shadow);
+                            transition: all 0.3s ease;
+                        " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                            <i class="fas fa-arrow-up"></i>
+                        </a>
+                        <a href="tel:+918268874907" style="
+                            width: 50px;
+                            height: 50px;
+                            background: var(--success-gradient);
+                            border-radius: 50%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            color: white;
+                            text-decoration: none;
+                            box-shadow: var(--shadow);
+                            transition: all 0.3s ease;
+                        " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                            <i class="fas fa-phone"></i>
+                        </a>
+                    </div>
+                `;
+                document.body.appendChild(fab);
+            }
+
+            // Console Easter Egg
+            console.log(`
+            %c🚀 Welcome to Durgaraj's Portfolio! 🚀
+            
+            %cInterested in the code? Here are some cool features:
+            • Glassmorphism design with backdrop filters
+            • CSS custom properties for theming
+            • AOS animations library
+            • Particle system animation
+            • Interactive chatbot
+            • PDF resume generation
+            • Responsive design
+            • Konami code easter egg (try: ↑↑↓↓←→←→BA)
+            
+            %cContact: durgarajchauhan@gmail.com
+            `, 
+            'color: #667eea; font-size: 16px; font-weight: bold;',
+            'color: #718096; font-size: 12px;',
+            'color: #667eea; font-size: 14px; font-weight: bold;'
+            );
+        });
+
+        // Environment Variables Helper (for development)
+        function loadEnvironmentVariables() {
+            // In a real deployment, these would be loaded from environment variables
+            // For development, you can set them here or use a .env file with a build tool
+            
+            if (typeof process !== 'undefined' && process.env) {
+                CONFIG.GEMINI_API_KEY = process.env.GEMINI_API_KEY || CONFIG.GEMINI_API_KEY;
+                CONFIG.EMAILJS_PUBLIC_KEY = process.env.EMAILJS_PUBLIC_KEY || CONFIG.EMAILJS_PUBLIC_KEY;
+                CONFIG.EMAILJS_SERVICE_ID = process.env.EMAILJS_SERVICE_ID || CONFIG.EMAILJS_SERVICE_ID;
+                CONFIG.EMAILJS_TEMPLATE_ID = process.env.EMAILJS_TEMPLATE_ID || CONFIG.EMAILJS_TEMPLATE_ID;
+            }
+        }
+
+        // Performance optimization
+        function optimizePerformance() {
+            // Lazy loading for images (if you add any)
+            if ('IntersectionObserver' in window) {
+                const imageObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            img.src = img.dataset.src;
+                            img.classList.remove('lazy');
+                            imageObserver.unobserve(img);
+                        }
+                    });
+                });
+
+                document.querySelectorAll('img[data-src]').forEach(img => {
+                    imageObserver.observe(img);
+                });
+            }
+
+            // Preload critical resources
+            const preloadLinks = [
+                'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap',
+                'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
+            ];
+
+            preloadLinks.forEach(href => {
+                const link = document.createElement('link');
+                link.rel = 'preload';
+                link.as = 'style';
+                link.href = href;
+                document.head.appendChild(link);
+            });
+        }
+
+        // Initialize optimizations
+        optimizePerformance();
+        loadEnvironmentVariables();
+
+        // Service Worker for offline functionality (progressive web app)
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(console.error);
+        }
+
+        // Add touch gestures for mobile
+        let startY = 0;
+        let endY = 0;
+
+        document.addEventListener('touchstart', e => {
+            startY = e.changedTouches[0].screenY;
+        });
+
+        document.addEventListener('touchend', e => {
+            endY = e.changedTouches[0].screenY;
+            handleGesture();
+        });
+
+        function handleGesture() {
+            const threshold = 50;
+            const diff = startY - endY;
+            
+            if (Math.abs(diff) > threshold) {
+                if (diff > 0) {
+                    // Swipe up - scroll to next section
+                    scrollToNextSection();
+                } else {
+                    // Swipe down - scroll to previous section
+                    scrollToPrevSection();
+                }
+            }
+        }
+
+        function scrollToNextSection() {
+            const sections = document.querySelectorAll('section');
+            const currentSection = getCurrentSection();
+            const currentIndex = Array.from(sections).indexOf(currentSection);
+            
+            if (currentIndex < sections.length - 1) {
+                sections[currentIndex + 1].scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function scrollToPrevSection() {
+            const sections = document.querySelectorAll('section');
+            const currentSection = getCurrentSection();
+            const currentIndex = Array.from(sections).indexOf(currentSection);
+            
+            if (currentIndex > 0) {
+                sections[currentIndex - 1].scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function getCurrentSection() {
+            const sections = document.querySelectorAll('section');
+            const scrollPos = window.pageYOffset + 100;
+            
+            for (let section of sections) {
+                if (scrollPos >= section.offsetTop && scrollPos < section.offsetTop + section.offsetHeight) {
+                    return section;
+                }
+            }
+            return sections[0];
+        }
+    </script>
+</body>
+</html>
