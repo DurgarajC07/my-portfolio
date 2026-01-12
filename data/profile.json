@@ -1,0 +1,372 @@
+{
+  "personal": {
+    "name": "Durgaraj Chauhan",
+    "title": "Senior Software Engineer & GenAI Engineer",
+    "location": "Navi Mumbai, India",
+    "experience": "2.5+ years",
+    "email": "durgarajchauhan@gmail.com",
+    "github": "https://github.com/DurgarajC07",
+    "linkedin": "https://linkedin.com/in/durgaraj-chauhan",
+    "bio": "Senior Software Engineer and Full-Stack AI Engineer specializing in production-ready AI systems, RAG pipelines, agentic AI, and modern full-stack development.",
+    "tagline": "Building Intelligent, Scalable AI Solutions That Matter"
+  },
+  "skills": {
+    "ai_ml": [
+      "Large Language Models (LLMs)",
+      "RAG Systems",
+      "Agentic AI",
+      "Voice Bots",
+      "Computer Vision",
+      "LLM Fine-tuning",
+      "Multi-agent Systems",
+      "Vector Databases"
+    ],
+    "backend": [
+      "Python",
+      "FastAPI",
+      "Flask",
+      "Laravel",
+      "PHP",
+      "REST APIs",
+      "Microservices",
+      "Redis"
+    ],
+    "frontend": [
+      "React",
+      "TypeScript",
+      "Next.js",
+      "Modern UI/UX",
+      "Tailwind CSS"
+    ],
+    "devops": [
+      "Docker",
+      "AWS",
+      "Nginx",
+      "CI/CD",
+      "Linux",
+      "Scalable Deployment"
+    ]
+  },
+  "experience": [
+    {
+      "id": "exp-1",
+      "company": "Anvex AI Technologies",
+      "position": "Senior Software Engineer & GenAI Engineer",
+      "location": "Mumbai, India",
+      "duration": "Current",
+      "period": "2023 - Present",
+      "type": "full-time",
+      "responsibilities": [
+        "Led development of production-grade AI chatbots and callbots with real-time voice interaction",
+        "Implemented context-aware LLM pipelines with RAG-based knowledge grounding",
+        "Automated workflows achieving 60% efficiency gains across operations",
+        "Built VLM-based document processing systems for enterprise clients",
+        "Designed scalable microservices architecture with Docker and AWS",
+        "Developed high-performance APIs using FastAPI and Laravel"
+      ],
+      "achievements": [
+        "Reduced AI response latency by 40% through optimization",
+        "Deployed multi-tenant RAG systems serving 10,000+ queries/day",
+        "Led team in transitioning legacy systems to AI-powered solutions"
+      ],
+      "technologies": [
+        "Python",
+        "FastAPI",
+        "LLMs",
+        "RAG",
+        "Docker",
+        "AWS",
+        "Redis",
+        "Vector DBs"
+      ]
+    },
+    {
+      "id": "exp-2",
+      "company": "Reboot Technology pvt ltd",
+      "position": "Junior Web Developer",
+      "location": "India",
+      "duration": "1.5 years",
+      "period": "2023 - 2025",
+      "type": "full-time",
+      "responsibilities": [
+        "Delivered full-stack applications using Laravel, PHP, and React",
+        "Implemented computer vision projects for automated quality control",
+        "Integrated payment gateways (Stripe, Razorpay) for e-commerce platforms",
+        "Built secure authentication systems with JWT and OAuth",
+        "Developed responsive frontends with modern React patterns",
+        "Collaborated with design team on UX improvements"
+      ],
+      "achievements": [
+        "Earned 3x Employee of the Month awards",
+        "Reduced page load times by 50% through optimization",
+        "Successfully delivered 10+ client projects on time"
+      ],
+      "technologies": [
+        "Laravel",
+        "PHP",
+        "React",
+        "MySQL",
+        "JavaScript",
+        "Computer Vision",
+        "Payment Integration"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "id": "project-1",
+      "name": "AI Callbot System",
+      "slug": "ai-callbot-system",
+      "category": "AI/ML",
+      "tagline": "Production-grade voice AI system with real-time interaction",
+      "description": "Built a production-ready AI Callbot featuring real-time voice interaction, RAG-based knowledge grounding, and scalable cloud deployment. System handles 1000+ concurrent calls with sub-2gs latency.",
+      "technologies": [
+        "Python",
+        "FastAPI",
+        "LLMs",
+        "RAG",
+        "WebRTC",
+        "Redis",
+        "Docker",
+        "AWS"
+      ],
+      "features": [
+        "Real-time voice-to-text and text-to-voice pipeline",
+        "Context-aware conversation with memory",
+        "RAG system for knowledge grounding",
+        "Multi-tenant architecture",
+        "Scalable deployment with auto-scaling"
+      ],
+      "challenges": [
+        "Achieving sub-2s response latency for voice interactions",
+        "Handling concurrent connections at scale",
+        "Maintaining conversation context across sessions"
+      ],
+      "impact": {
+        "metric": "60% reduction in customer support costs",
+        "scale": "1000+ concurrent calls",
+        "uptime": "99.9% availability"
+      },
+      "github": null,
+      "demo": null
+    },
+    {
+      "id": "project-2",
+      "name": "Insurance Damage Estimation Platform",
+      "slug": "insurance-damage-estimation",
+      "category": "Computer Vision",
+      "tagline": "VLM-based automated vehicle damage assessment",
+      "description": "Developed an AI-powered platform for automated vehicle damage estimation using Vision-Language Models. System processes images and generates detailed damage reports with cost estimates.",
+      "technologies": [
+        "Python",
+        "Vision LLMs",
+        "FastAPI",
+        "React",
+        "PostgreSQL",
+        "Docker"
+      ],
+      "features": [
+        "Automated damage detection from images",
+        "Cost estimation with 95% accuracy",
+        "Multi-angle image processing",
+        "Integration with insurance workflows",
+        "Real-time report generation"
+      ],
+      "challenges": [
+        "Handling varying image quality and lighting",
+        "Training models for accurate damage classification",
+        "Integrating with legacy insurance systems"
+      ],
+      "impact": {
+        "metric": "80% faster claim processing",
+        "accuracy": "95% estimation accuracy",
+        "adoption": "Used by 5+ insurance companies"
+      },
+      "github": null,
+      "demo": null
+    },
+    {
+      "id": "project-3",
+      "name": "Enterprise CMS Solution",
+      "slug": "enterprise-cms",
+      "category": "Full-Stack",
+      "tagline": "Scalable content management for enterprises",
+      "description": "Built a comprehensive enterprise CMS with role-based access control, workflow automation, and multi-tenant architecture. Supports 50,000+ content pieces with search and analytics.",
+      "technologies": [
+        "Laravel",
+        "React",
+        "TypeScript",
+        "MySQL",
+        "Redis",
+        "Docker",
+        "AWS"
+      ],
+      "features": [
+        "Role-based access control (RBAC)",
+        "Workflow automation and approval chains",
+        "Cronjob and scheduling",
+        "Real-time collaboration",
+        "Version control and audit logs"
+      ],
+      "challenges": [
+        "Scaling to handle 50,000+ content pieces",
+        "Implementing complex permission system",
+        "Real-time synchronization across users"
+      ],
+      "impact": {
+        "metric": "70% improvement in content workflow",
+        "users": "500+ concurrent users",
+        "performance": "Sub-100ms query times"
+      },
+      "github": null,
+      "demo": null
+    },
+    {
+      "id": "project-4",
+      "name": "RAG Knowledge Base System",
+      "slug": "rag-knowledge-base",
+      "category": "AI/ML",
+      "tagline": "Context-aware AI knowledge retrieval",
+      "description": "Designed and implemented a high-performance RAG system for enterprise knowledge management. Features hybrid search, re-ranking, and adaptive chunking strategies.",
+      "technologies": [
+        "Python",
+        "LangChain",
+        "Qdrant",
+        "OpenAI",
+        "FastAPI",
+        "PostgreSQL"
+      ],
+      "features": [
+        "Hybrid search (semantic + keyword)",
+        "Context-aware re-ranking",
+        "Adaptive chunking strategies",
+        "Multi-source data ingestion",
+        "Conversation memory and context"
+      ],
+      "challenges": [
+        "Optimizing retrieval accuracy",
+        "Handling multi-modal data sources",
+        "Reducing hallucinations"
+      ],
+      "impact": {
+        "metric": "40% improvement in answer accuracy",
+        "retrieval": "Sub-500ms retrieval time",
+        "scale": "1M+ documents indexed"
+      },
+      "github": null,
+      "demo": null
+    }
+  ],
+  "education": [
+    {
+      "id": "edu-1",
+      "degree": "Bachelor of Engineering",
+      "field": "Computer Engineering",
+      "institution": "Saraswati College of Engineering",
+      "location": "India",
+      "period": "2020 - 2023",
+      "grade": "8.86 CGPA",
+      "highlights": [
+        "Specialized in Machine Learning and AI",
+        "Published research on nft marketplace",
+        "Particaipated in coding competitions"
+      ]
+    },
+    {
+      "id": "edu-2",
+      "degree": "Diploma",
+      "field": "Computer Engineering",
+      "institution": "Saraswati Institute of Technology",
+      "location": "India",
+      "period": "2017 - 2020",
+      "grade": "90.91 percentage",
+      "highlights": [
+        "Specialized in Computer Science",
+        "Particaipated in technical competitions",
+        "State Level Runner-up in Technical Quiz"
+      ]
+    }
+  ],
+  "logs": [
+    {
+      "timestamp": "2024-12-15T10:30:00Z",
+      "level": "INFO",
+      "service": "career.system",
+      "message": "Achieved milestone: Led deployment of multi-agent AI system for enterprise client"
+    },
+    {
+      "timestamp": "2024-11-20T14:15:00Z",
+      "level": "SUCCESS",
+      "service": "skill.acquisition",
+      "message": "Mastered advanced agentic AI patterns and multi-agent orchestration"
+    },
+    {
+      "timestamp": "2024-10-05T09:00:00Z",
+      "level": "INFO",
+      "service": "project.delivery",
+      "message": "Successfully delivered RAG system with 99.9% uptime and 40% improved accuracy"
+    },
+    {
+      "timestamp": "2024-08-12T16:45:00Z",
+      "level": "WARN",
+      "service": "performance.optimization",
+      "message": "Identified and resolved AI latency bottleneck, reducing response time by 40%"
+    },
+    {
+      "timestamp": "2024-06-30T11:20:00Z",
+      "level": "SUCCESS",
+      "service": "career.milestone",
+      "message": "Promoted to Senior Software Engineer role, leading AI initiatives"
+    },
+    {
+      "timestamp": "2024-04-18T13:30:00Z",
+      "level": "INFO",
+      "service": "skill.acquisition",
+      "message": "Completed web development course and implemented in production"
+    },
+    {
+      "timestamp": "2023-12-01T10:00:00Z",
+      "level": "SUCCESS",
+      "service": "career.transition",
+      "message": "Joined Anvex AI Technologies as Software Engineer"
+    },
+    {
+      "timestamp": "2023-09-15T14:00:00Z",
+      "level": "INFO",
+      "service": "achievement.award",
+      "message": "Received 3rd Employee of the Month award at Reboot Technology"
+    },
+    {
+      "timestamp": "2023-06-10T09:30:00Z",
+      "level": "SUCCESS",
+      "service": "project.delivery",
+      "message": "Deployed computer vision system for automated quality control, improving accuracy by 85%"
+    },
+    {
+      "timestamp": "2022-07-01T08:00:00Z",
+      "level": "INFO",
+      "service": "career.start",
+      "message": "Started career as Junior Web Developer at Reboot Technology"
+    },
+    {
+      "timestamp": "2022-05-20T15:00:00Z",
+      "level": "SUCCESS",
+      "service": "education.completed",
+      "message": "Graduated with B.E in Computer Engineering (8.86 CGPA)"
+    }
+  ],
+  "currentFocus": [
+    "Advanced agentic AI patterns and multi-agent systems",
+    "LLM fine-tuning and model optimization",
+    "High-performance RAG architectures",
+    "Production-grade AI system design",
+    "Scalable microservices for AI applications"
+  ],
+  "values": [
+    "Building AI that solves real-world problems",
+    "Clean architecture and maintainable code",
+    "Production-ready over proof-of-concept",
+    "Continuous learning and innovation",
+    "Collaboration and knowledge sharing"
+  ]
+}
