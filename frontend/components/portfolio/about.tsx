@@ -45,6 +45,17 @@ export function About({ data, skills }: AboutProps) {
 
           {/* Right - Info */}
           <div className="space-y-8">
+            {/* Image */}
+            {data.image_url && (
+              <div className="relative h-64 rounded-lg overflow-hidden">
+                <img
+                  src={data.image_url}
+                  alt={data.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
+
             {/* Location */}
             {data.location && (
               <div className="bg-background border border-border rounded-lg p-4 flex items-center gap-3">

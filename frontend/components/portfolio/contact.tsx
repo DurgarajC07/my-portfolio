@@ -1,7 +1,6 @@
 'use client';
 
-import React from "react"
-
+import React from 'react';
 import { Mail, Linkedin, Github, Twitter, Send } from 'lucide-react';
 import { useState } from 'react';
 
@@ -122,8 +121,10 @@ export function Contact() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-foreground mb-1">Email</h3>
-                  <p className="text-muted-foreground text-sm mb-3">hello@example.com</p>
-                  <p className="text-xs text-muted-foreground">I typically respond within 24 hours</p>
+                  <a href="mailto:contact@portfolio.com" className="text-muted-foreground text-sm mb-3 hover:text-accent">
+                    contact@portfolio.com
+                  </a>
+                  <p className="text-xs text-muted-foreground mt-2">I typically respond within 24 hours</p>
                 </div>
               </div>
             </div>
@@ -133,16 +134,19 @@ export function Contact() {
               <h3 className="font-semibold text-foreground">Connect with me</h3>
               <div className="grid grid-cols-2 gap-3">
                 {[
-                  { icon: Github, label: 'GitHub', url: '#' },
-                  { icon: Linkedin, label: 'LinkedIn', url: '#' },
-                  { icon: Twitter, label: 'Twitter', url: '#' },
-                  { icon: Mail, label: 'Email', url: '#' },
+                  { icon: Github, label: 'GitHub', url: 'https://github.com/DurgarajC07' },
+                  { icon: Linkedin, label: 'LinkedIn', url: 'https://www.linkedin.com/in/durgaraj-chauhan/' },
+                  { icon: Twitter, label: 'Twitter', url: 'https://twitter.com/Durgaraj07' },
+                  { icon: Mail, label: 'Email', url: 'mailto:contact@portfolio.com' },
                 ].map((social, i) => {
                   const Icon = social.icon;
+                  const isEmail = social.url.startsWith('mailto:');
                   return (
                     <a
                       key={i}
                       href={social.url}
+                      target={isEmail ? undefined : '_blank'}
+                      rel={isEmail ? undefined : 'noopener noreferrer'}
                       className="flex items-center gap-2 p-3 bg-card border border-border rounded-lg hover:bg-muted hover:text-accent transition-colors font-medium text-sm"
                     >
                       <Icon size={18} />

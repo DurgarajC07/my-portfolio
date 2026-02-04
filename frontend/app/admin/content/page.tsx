@@ -8,53 +8,62 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Loader2, Save, User, Briefcase, GraduationCap, Award } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Loader2, Save, Plus, Edit, Trash2, GripVertical } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export default function ContentManagerPage() {
   const { token } = useAuth();
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
   const [activeTab, setActiveTab] = useState('hero');
 
-  // Form states for different sections
-  const [heroData, setHeroData] = useState<any>({});
-  const [aboutData, setAboutData] = useState<any>({});
-  const [projects, setProjects] = useState<any[]>([]);
-  const [experiences, setExperiences] = useState<any[]>([]);
-  const [education, setEducation] = useState<any[]>([]);
+  // Data states
+  const [heroData, setHeroData] = useState<any[]>([]);
+  const [aboutData, setAboutData] = useState<any[]>([]);
+  const [skillsData, setSkillsData] = useState<any[]>([]);
+  const [projectsData, setProjectsData] = useState<any[]>([]);
+  const [experienceData, setExperienceData] = useState<any[]>([]);
+  const [educationData, setEducationData] = useState<any[]>([]);
+  const [testimonialsData, setTestimonialsData] = useState<any[]>([]);
+  const [servicesData, setServicesData] = useState<any[]>([]);
+
+  // Dialog states
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [currentSection, setCurrentSection] = useState('');
+  const [editingItem, setEditingItem] = useState<any>(null);
+  const [formData, setFormData] = useState<any>({});
 
   useEffect(() => {
     fetchAllData();
   }, []);
 
   const fetchAllData = async () => {
+    setLoading(true);
     try {
-      const [heroRes, aboutRes, projectsRes, expRes, eduRes] = await Promise.allSettled([
-        api.hero.getAll(),
-        api.about.getAll(),
-        api.projects.getAll(),
-        api.experience.getAll(),
-        api.education.getAll(),
-      ]);
+      const [hero, about, skills, projects, experience, education, testimonials, services] =
+        await Promise.allSettled([
+          api.hero.getAll(),
+          api.about.getAll(),
+          api.skills.getAll(),
+          api.projects.getAll(),
+          api.experience.getAll(),
+          api.education.getAll(),
+          api.testimonials.getAll(),
+          api.services.getAll(),
+        ]);
 
-      if (heroRes.status === 'fulfilled' && (heroRes.value as any[])[0]) {
-        setHeroData((heroRes.value as any[])[0]);
-      }
-      if (aboutRes.status === 'fulfilled' && (aboutRes.value as any[])[0]) {
-        setAboutData((aboutRes.value as any[])[0]);
-      }
-      if (projectsRes.status === 'fulfilled') {
-        setProjects((projectsRes.value as any[]) || []);
-      }
-      if (expRes.status === 'fulfilled') {
-        setExperiences((expRes.value as any[]) || []);
-      }
-      if (eduRes.status === 'fulfilled') {
-        setEducation((eduRes.value as any[]) || []);
-      }
+      setHeroData(hero.status === 'fulfilled' ? (hero.value as any[]) : []);
+      setAboutData(about.status === 'fulfilled' ? (about.value as any[]) : []);
+      setSkillsData(skills.status === 'fulfilled' ? (skills.value as any[]) : []);
+      setProjectsData(projects.status === 'fulfilled' ? (projects.value as any[]) : []);
+      setExperienceData(experience.status === 'fulfilled' ? (experience.value as any[]) : []);
+      setEducationData(education.status === 'fulfilled' ? (education.value as any[]) : []);
+      setTestimonialsData(testimonials.status === 'fulfilled' ? (testimonials.value as any[]) : []);
+      setServicesData(services.status === 'fulfilled' ? (services.value as any[]) : []);
     } catch (error: any) {
       setMessage({ type: 'error', text: error.message });
     } finally {
@@ -62,41 +71,714 @@ export default function ContentManagerPage() {
     }
   };
 
-  const saveHero = async (e: React.FormEvent) => {
+  const handleEdit = (section: string, item: any) => {
+    setCurrentSection(section);
+    setEditingItem(item);
+    setFormData({ ...item });
+    setIsDialogOpen(true);
+  };
+
+  const handleNew = (section: string) => {
+    setCurrentSection(section);
+    setEditingItem(null);
+    setFormData(getDefaultFormData(section));
+    setIsDialogOpen(true);
+  };
+
+  const getDefaultFormData = (section: string) => {
+    const defaults: any = {
+      hero: {
+        title: '',
+        subtitle: '',
+        description: '',
+        cta_text: 'View My Work',
+        cta_link: '#projects',
+        background_type: 'color',
+        background_value: '#000000',
+        social_links: '{}',
+        visible: true,
+        order_index: 0,
+      },
+      about: {
+        title: 'About Me',
+        description: '',
+        image_url: '',
+        location: '',
+        stats: '{}',
+        visible: true,
+        order_index: 0,
+      },
+      skills: {
+        category: 'Frontend',
+        name: '',
+        level: 80,
+        icon: '',
+        visible: true,
+        order_index: 0,
+      },
+      projects: {
+        title: '',
+        description: '',
+        image_url: '',
+        technologies: '',
+        github_url: '',
+        live_url: '',
+        featured: false,
+        visible: true,
+        order_index: 0,
+      },
+      experience: {
+        company: '',
+        position: '',
+        description: '',
+        start_date: '',
+        end_date: '',
+        location: '',
+        current: false,
+        visible: true,
+        order_index: 0,
+      },
+      education: {
+        institution: '',
+        degree: '',
+        field: '',
+        description: '',
+        start_date: '',
+        end_date: '',
+        location: '',
+        grade: '',
+        visible: true,
+        order_index: 0,
+      },
+      testimonials: {
+        name: '',
+        role: '',
+        company: '',
+        content: '',
+        image_url: '',
+        rating: 5,
+        visible: true,
+        order_index: 0,
+      },
+      services: {
+        title: '',
+        description: '',
+        icon: '',
+        features: '[]',
+        visible: true,
+        order_index: 0,
+      },
+    };
+    return defaults[section] || {};
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSaving(true);
+    setMessage({ type: '', text: '' });
+
     try {
-      if (heroData.id) {
-        await api.hero.update(heroData.id, heroData, token!);
+      const apiMap: any = {
+        hero: api.hero,
+        about: api.about,
+        skills: api.skills,
+        projects: api.projects,
+        experience: api.experience,
+        education: api.education,
+        testimonials: api.testimonials,
+        services: api.services,
+      };
+
+      const apiEndpoint = apiMap[currentSection];
+
+      if (editingItem) {
+        await apiEndpoint.update(editingItem.id, formData, token!);
+        setMessage({ type: 'success', text: 'Updated successfully!' });
       } else {
-        await api.hero.create(heroData, token!);
+        await apiEndpoint.create(formData, token!);
+        setMessage({ type: 'success', text: 'Created successfully!' });
       }
-      setMessage({ type: 'success', text: 'Hero section saved!' });
-      await fetchAllData();
+
+      setIsDialogOpen(false);
+      fetchAllData();
     } catch (error: any) {
       setMessage({ type: 'error', text: error.message });
-    } finally {
-      setSaving(false);
     }
   };
 
-  const saveAbout = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSaving(true);
+  const handleDelete = async (section: string, id: number) => {
+    if (!confirm('Are you sure you want to delete this item?')) return;
+
     try {
-      if (aboutData.id) {
-        await api.about.update(aboutData.id, aboutData, token!);
-      } else {
-        await api.about.create(aboutData, token!);
-      }
-      setMessage({ type: 'success', text: 'About section saved!' });
-      await fetchAllData();
+      const apiMap: any = {
+        hero: api.hero,
+        about: api.about,
+        skills: api.skills,
+        projects: api.projects,
+        experience: api.experience,
+        education: api.education,
+        testimonials: api.testimonials,
+        services: api.services,
+      };
+
+      await apiMap[section].delete(id, token!);
+      setMessage({ type: 'success', text: 'Deleted successfully!' });
+      fetchAllData();
     } catch (error: any) {
       setMessage({ type: 'error', text: error.message });
-    } finally {
-      setSaving(false);
     }
   };
+
+  const renderFormFields = () => {
+    const fields: any = {
+      hero: (
+        <>
+          <div>
+            <Label>Title *</Label>
+            <Input
+              value={formData.title || ''}
+              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <Label>Subtitle</Label>
+            <Input
+              value={formData.subtitle || ''}
+              onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
+            />
+          </div>
+          <div>
+            <Label>Description</Label>
+            <Textarea
+              value={formData.description || ''}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              rows={4}
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>CTA Text</Label>
+              <Input
+                value={formData.cta_text || ''}
+                onChange={(e) => setFormData({ ...formData, cta_text: e.target.value })}
+              />
+            </div>
+            <div>
+              <Label>CTA Link</Label>
+              <Input
+                value={formData.cta_link || ''}
+                onChange={(e) => setFormData({ ...formData, cta_link: e.target.value })}
+              />
+            </div>
+          </div>
+          <div>
+            <Label>Social Links (JSON)</Label>
+            <Textarea
+              value={formData.social_links || '{}'}
+              onChange={(e) => setFormData({ ...formData, social_links: e.target.value })}
+              placeholder='{"github": "url", "linkedin": "url"}'
+              rows={3}
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <Switch
+              checked={formData.visible ?? true}
+              onCheckedChange={(checked) => setFormData({ ...formData, visible: checked })}
+            />
+            <Label>Visible</Label>
+          </div>
+        </>
+      ),
+      about: (
+        <>
+          <div>
+            <Label>Title</Label>
+            <Input
+              value={formData.title || ''}
+              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+            />
+          </div>
+          <div>
+            <Label>Description *</Label>
+            <Textarea
+              value={formData.description || ''}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              rows={6}
+              required
+            />
+          </div>
+          <div>
+            <Label>Image URL</Label>
+            <Input
+              value={formData.image_url || ''}
+              onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
+            />
+          </div>
+          <div>
+            <Label>Location</Label>
+            <Input
+              value={formData.location || ''}
+              onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+            />
+          </div>
+          <div>
+            <Label>Stats (JSON)</Label>
+            <Textarea
+              value={formData.stats || '{}'}
+              onChange={(e) => setFormData({ ...formData, stats: e.target.value })}
+              placeholder='{"experience": "5+ Years", "projects": "50+"}'
+              rows={3}
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <Switch
+              checked={formData.visible ?? true}
+              onCheckedChange={(checked) => setFormData({ ...formData, visible: checked })}
+            />
+            <Label>Visible</Label>
+          </div>
+        </>
+      ),
+      skills: (
+        <>
+          <div>
+            <Label>Category *</Label>
+            <Input
+              value={formData.category || ''}
+              onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+              placeholder="Frontend, Backend, Tools"
+              required
+            />
+          </div>
+          <div>
+            <Label>Name *</Label>
+            <Input
+              value={formData.name || ''}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <Label>Level (0-100)</Label>
+            <Input
+              type="number"
+              min="0"
+              max="100"
+              value={formData.level || 80}
+              onChange={(e) => setFormData({ ...formData, level: parseInt(e.target.value) })}
+            />
+          </div>
+          <div>
+            <Label>Icon</Label>
+            <Input
+              value={formData.icon || ''}
+              onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
+              placeholder="Icon name or URL"
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <Switch
+              checked={formData.visible ?? true}
+              onCheckedChange={(checked) => setFormData({ ...formData, visible: checked })}
+            />
+            <Label>Visible</Label>
+          </div>
+        </>
+      ),
+      projects: (
+        <>
+          <div>
+            <Label>Title *</Label>
+            <Input
+              value={formData.title || ''}
+              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <Label>Description *</Label>
+            <Textarea
+              value={formData.description || ''}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              rows={4}
+              required
+            />
+          </div>
+          <div>
+            <Label>Image URL</Label>
+            <Input
+              value={formData.image_url || ''}
+              onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
+            />
+          </div>
+          <div>
+            <Label>Technologies (comma-separated)</Label>
+            <Input
+              value={formData.technologies || ''}
+              onChange={(e) => setFormData({ ...formData, technologies: e.target.value })}
+              placeholder="React, Node.js, MongoDB"
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>GitHub URL</Label>
+              <Input
+                value={formData.github_url || ''}
+                onChange={(e) => setFormData({ ...formData, github_url: e.target.value })}
+              />
+            </div>
+            <div>
+              <Label>Live URL</Label>
+              <Input
+                value={formData.live_url || ''}
+                onChange={(e) => setFormData({ ...formData, live_url: e.target.value })}
+              />
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <Switch
+                checked={formData.featured ?? false}
+                onCheckedChange={(checked) => setFormData({ ...formData, featured: checked })}
+              />
+              <Label>Featured</Label>
+            </div>
+            <div className="flex items-center gap-2">
+              <Switch
+                checked={formData.visible ?? true}
+                onCheckedChange={(checked) => setFormData({ ...formData, visible: checked })}
+              />
+              <Label>Visible</Label>
+            </div>
+          </div>
+        </>
+      ),
+      experience: (
+        <>
+          <div>
+            <Label>Company *</Label>
+            <Input
+              value={formData.company || ''}
+              onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <Label>Position *</Label>
+            <Input
+              value={formData.position || ''}
+              onChange={(e) => setFormData({ ...formData, position: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <Label>Description</Label>
+            <Textarea
+              value={formData.description || ''}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              rows={4}
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>Start Date</Label>
+              <Input
+                type="date"
+                value={formData.start_date?.split('T')[0] || ''}
+                onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
+              />
+            </div>
+            <div>
+              <Label>End Date</Label>
+              <Input
+                type="date"
+                value={formData.end_date?.split('T')[0] || ''}
+                onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
+                disabled={formData.current}
+              />
+            </div>
+          </div>
+          <div>
+            <Label>Location</Label>
+            <Input
+              value={formData.location || ''}
+              onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+            />
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <Switch
+                checked={formData.current ?? false}
+                onCheckedChange={(checked) => setFormData({ ...formData, current: checked })}
+              />
+              <Label>Current Position</Label>
+            </div>
+            <div className="flex items-center gap-2">
+              <Switch
+                checked={formData.visible ?? true}
+                onCheckedChange={(checked) => setFormData({ ...formData, visible: checked })}
+              />
+              <Label>Visible</Label>
+            </div>
+          </div>
+        </>
+      ),
+      education: (
+        <>
+          <div>
+            <Label>Institution *</Label>
+            <Input
+              value={formData.institution || ''}
+              onChange={(e) => setFormData({ ...formData, institution: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <Label>Degree *</Label>
+            <Input
+              value={formData.degree || ''}
+              onChange={(e) => setFormData({ ...formData, degree: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <Label>Field of Study</Label>
+            <Input
+              value={formData.field || ''}
+              onChange={(e) => setFormData({ ...formData, field: e.target.value })}
+            />
+          </div>
+          <div>
+            <Label>Description</Label>
+            <Textarea
+              value={formData.description || ''}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              rows={3}
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>Start Date</Label>
+              <Input
+                type="date"
+                value={formData.start_date?.split('T')[0] || ''}
+                onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
+              />
+            </div>
+            <div>
+              <Label>End Date</Label>
+              <Input
+                type="date"
+                value={formData.end_date?.split('T')[0] || ''}
+                onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>Location</Label>
+              <Input
+                value={formData.location || ''}
+                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+              />
+            </div>
+            <div>
+              <Label>Grade/GPA</Label>
+              <Input
+                value={formData.grade || ''}
+                onChange={(e) => setFormData({ ...formData, grade: e.target.value })}
+              />
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <Switch
+              checked={formData.visible ?? true}
+              onCheckedChange={(checked) => setFormData({ ...formData, visible: checked })}
+            />
+            <Label>Visible</Label>
+          </div>
+        </>
+      ),
+      testimonials: (
+        <>
+          <div>
+            <Label>Name *</Label>
+            <Input
+              value={formData.name || ''}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <Label>Role *</Label>
+            <Input
+              value={formData.role || ''}
+              onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <Label>Company</Label>
+            <Input
+              value={formData.company || ''}
+              onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+            />
+          </div>
+          <div>
+            <Label>Content *</Label>
+            <Textarea
+              value={formData.content || ''}
+              onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+              rows={4}
+              required
+            />
+          </div>
+          <div>
+            <Label>Image URL</Label>
+            <Input
+              value={formData.image_url || ''}
+              onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
+            />
+          </div>
+          <div>
+            <Label>Rating (1-5)</Label>
+            <Input
+              type="number"
+              min="1"
+              max="5"
+              value={formData.rating || 5}
+              onChange={(e) => setFormData({ ...formData, rating: parseInt(e.target.value) })}
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <Switch
+              checked={formData.visible ?? true}
+              onCheckedChange={(checked) => setFormData({ ...formData, visible: checked })}
+            />
+            <Label>Visible</Label>
+          </div>
+        </>
+      ),
+      services: (
+        <>
+          <div>
+            <Label>Title *</Label>
+            <Input
+              value={formData.title || ''}
+              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <Label>Description *</Label>
+            <Textarea
+              value={formData.description || ''}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              rows={4}
+              required
+            />
+          </div>
+          <div>
+            <Label>Icon</Label>
+            <Input
+              value={formData.icon || ''}
+              onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
+              placeholder="Icon name or URL"
+            />
+          </div>
+          <div>
+            <Label>Features (JSON Array)</Label>
+            <Textarea
+              value={formData.features || '[]'}
+              onChange={(e) => setFormData({ ...formData, features: e.target.value })}
+              placeholder='["Feature 1", "Feature 2", "Feature 3"]'
+              rows={4}
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <Switch
+              checked={formData.visible ?? true}
+              onCheckedChange={(checked) => setFormData({ ...formData, visible: checked })}
+            />
+            <Label>Visible</Label>
+          </div>
+        </>
+      ),
+    };
+
+    return fields[currentSection] || null;
+  };
+
+  const renderSection = (section: string, data: any[], title: string) => (
+    <Card>
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle>{title}</CardTitle>
+            <CardDescription>Manage your {title.toLowerCase()} content</CardDescription>
+          </div>
+          <Button onClick={() => handleNew(section)}>
+            <Plus className="h-4 w-4 mr-2" />
+            Add New
+          </Button>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
+          {data.length === 0 ? (
+            <p className="text-muted-foreground text-center py-8">
+              No {title.toLowerCase()} yet. Click "Add New" to create one.
+            </p>
+          ) : (
+            data.map((item) => (
+              <Card key={item.id}>
+                <CardContent className="p-4">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <h4 className="font-semibold">
+                        {item.title || item.name || item.company || item.institution}
+                      </h4>
+                      <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
+                        {item.subtitle || item.description || item.content || item.role}
+                      </p>
+                      <div className="flex items-center gap-2 mt-2">
+                        {item.visible !== undefined && (
+                          <span
+                            className={`text-xs px-2 py-1 rounded ${
+                              item.visible ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
+                            }`}
+                          >
+                            {item.visible ? 'Visible' : 'Hidden'}
+                          </span>
+                        )}
+                        {item.featured && (
+                          <span className="text-xs px-2 py-1 rounded bg-yellow-100 text-yellow-700">
+                            Featured
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button variant="outline" size="sm" onClick={() => handleEdit(section, item)}>
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleDelete(section, item.id)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
 
   if (loading) {
     return (
@@ -113,7 +795,7 @@ export default function ContentManagerPage() {
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold text-foreground">Content Manager</h1>
-          <p className="text-muted-foreground mt-1">Manage all your portfolio content</p>
+          <p className="text-muted-foreground mt-1">Manage all your portfolio content in one place</p>
         </div>
 
         {message.text && (
@@ -123,205 +805,48 @@ export default function ContentManagerPage() {
         )}
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8">
             <TabsTrigger value="hero">Hero</TabsTrigger>
             <TabsTrigger value="about">About</TabsTrigger>
-            <TabsTrigger value="projects">Projects ({projects.length})</TabsTrigger>
-            <TabsTrigger value="experience">Experience ({experiences.length})</TabsTrigger>
-            <TabsTrigger value="education">Education ({education.length})</TabsTrigger>
+            <TabsTrigger value="skills">Skills</TabsTrigger>
+            <TabsTrigger value="projects">Projects</TabsTrigger>
+            <TabsTrigger value="experience">Experience</TabsTrigger>
+            <TabsTrigger value="education">Education</TabsTrigger>
+            <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
+            <TabsTrigger value="services">Services</TabsTrigger>
           </TabsList>
 
-          {/* Hero Section */}
-          <TabsContent value="hero">
-            <form onSubmit={saveHero} className="space-y-4 bg-card border border-border rounded-lg p-6">
-              <div className="space-y-2">
-                <Label htmlFor="hero_title">Title *</Label>
-                <Input
-                  id="hero_title"
-                  value={heroData.title || ''}
-                  onChange={(e) => setHeroData({ ...heroData, title: e.target.value })}
-                  placeholder="Your Name"
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="hero_subtitle">Subtitle *</Label>
-                <Input
-                  id="hero_subtitle"
-                  value={heroData.subtitle || ''}
-                  onChange={(e) => setHeroData({ ...heroData, subtitle: e.target.value })}
-                  placeholder="Your Professional Title"
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="hero_description">Description</Label>
-                <Textarea
-                  id="hero_description"
-                  value={heroData.description || ''}
-                  onChange={(e) => setHeroData({ ...heroData, description: e.target.value })}
-                  rows={3}
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="cta_text">CTA Text</Label>
-                  <Input
-                    id="cta_text"
-                    value={heroData.cta_text || ''}
-                    onChange={(e) => setHeroData({ ...heroData, cta_text: e.target.value })}
-                    placeholder="View My Work"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="cta_link">CTA Link</Label>
-                  <Input
-                    id="cta_link"
-                    value={heroData.cta_link || ''}
-                    onChange={(e) => setHeroData({ ...heroData, cta_link: e.target.value })}
-                    placeholder="#projects"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="social_links">Social Links (JSON)</Label>
-                <Textarea
-                  id="social_links"
-                  value={typeof heroData.social_links === 'string' ? heroData.social_links : JSON.stringify(heroData.social_links || {}, null, 2)}
-                  onChange={(e) => setHeroData({ ...heroData, social_links: e.target.value })}
-                  rows={3}
-                  className="font-mono text-sm"
-                />
-              </div>
-
-              <Button type="submit" disabled={saving}>
-                {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
-                Save Hero Section
-              </Button>
-            </form>
-          </TabsContent>
-
-          {/* About Section */}
-          <TabsContent value="about">
-            <form onSubmit={saveAbout} className="space-y-4 bg-card border border-border rounded-lg p-6">
-              <div className="space-y-2">
-                <Label htmlFor="about_title">Title *</Label>
-                <Input
-                  id="about_title"
-                  value={aboutData.title || ''}
-                  onChange={(e) => setAboutData({ ...aboutData, title: e.target.value })}
-                  placeholder="About Me"
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="about_description">Description *</Label>
-                <Textarea
-                  id="about_description"
-                  value={aboutData.description || ''}
-                  onChange={(e) => setAboutData({ ...aboutData, description: e.target.value })}
-                  rows={6}
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="location">Location</Label>
-                <Input
-                  id="location"
-                  value={aboutData.location || ''}
-                  onChange={(e) => setAboutData({ ...aboutData, location: e.target.value })}
-                  placeholder="City, Country"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="stats">Stats (JSON)</Label>
-                <Textarea
-                  id="stats"
-                  value={typeof aboutData.stats === 'string' ? aboutData.stats : JSON.stringify(aboutData.stats || {}, null, 2)}
-                  onChange={(e) => setAboutData({ ...aboutData, stats: e.target.value })}
-                  rows={3}
-                  className="font-mono text-sm"
-                  placeholder='{"years": "5+", "projects": "50+", "clients": "20+"}'
-                />
-              </div>
-
-              <Button type="submit" disabled={saving}>
-                {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
-                Save About Section
-              </Button>
-            </form>
-          </TabsContent>
-
-          {/* Projects List */}
-          <TabsContent value="projects">
-            <div className="space-y-4">
-              {projects.map((project) => (
-                <div key={project.id} className="bg-card border border-border rounded-lg p-4">
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold">{project.title}</h3>
-                      <p className="text-sm text-muted-foreground mt-1">{project.description}</p>
-                      <div className="flex gap-2 mt-2">
-                        {project.featured && (
-                          <span className="px-2 py-1 bg-accent/20 text-accent text-xs rounded">Featured</span>
-                        )}
-                        {!project.visible && (
-                          <span className="px-2 py-1 bg-red-500/20 text-red-500 text-xs rounded">Hidden</span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-              <p className="text-sm text-muted-foreground text-center py-4">
-                To add or edit projects, use the dedicated project editor in the menu
-              </p>
-            </div>
-          </TabsContent>
-
-          {/* Experience List */}
-          <TabsContent value="experience">
-            <div className="space-y-4">
-              {experiences.map((exp) => (
-                <div key={exp.id} className="bg-card border border-border rounded-lg p-4">
-                  <div className="flex gap-3">
-                    <Briefcase className="text-accent mt-1" size={20} />
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold">{exp.position}</h3>
-                      <p className="text-sm text-accent">{exp.company}</p>
-                      <p className="text-sm text-muted-foreground">{exp.start_date} - {exp.end_date || 'Present'}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </TabsContent>
-
-          {/* Education List */}
-          <TabsContent value="education">
-            <div className="space-y-4">
-              {education.map((edu) => (
-                <div key={edu.id} className="bg-card border border-border rounded-lg p-4">
-                  <div className="flex gap-3">
-                    <GraduationCap className="text-accent mt-1" size={20} />
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold">{edu.degree}</h3>
-                      <p className="text-sm text-accent">{edu.institution}</p>
-                      <p className="text-sm text-muted-foreground">{edu.start_date} - {edu.end_date}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </TabsContent>
+          <TabsContent value="hero">{renderSection('hero', heroData, 'Hero Section')}</TabsContent>
+          <TabsContent value="about">{renderSection('about', aboutData, 'About Section')}</TabsContent>
+          <TabsContent value="skills">{renderSection('skills', skillsData, 'Skills')}</TabsContent>
+          <TabsContent value="projects">{renderSection('projects', projectsData, 'Projects')}</TabsContent>
+          <TabsContent value="experience">{renderSection('experience', experienceData, 'Experience')}</TabsContent>
+          <TabsContent value="education">{renderSection('education', educationData, 'Education')}</TabsContent>
+          <TabsContent value="testimonials">{renderSection('testimonials', testimonialsData, 'Testimonials')}</TabsContent>
+          <TabsContent value="services">{renderSection('services', servicesData, 'Services')}</TabsContent>
         </Tabs>
+
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>
+                {editingItem ? 'Edit' : 'Add'} {currentSection.charAt(0).toUpperCase() + currentSection.slice(1)}
+              </DialogTitle>
+            </DialogHeader>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {renderFormFields()}
+              <div className="flex justify-end gap-2 pt-4">
+                <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
+                  Cancel
+                </Button>
+                <Button type="submit">
+                  <Save className="h-4 w-4 mr-2" />
+                  Save
+                </Button>
+              </div>
+            </form>
+          </DialogContent>
+        </Dialog>
       </div>
     </AdminLayout>
   );

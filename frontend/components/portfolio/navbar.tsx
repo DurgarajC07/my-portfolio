@@ -40,10 +40,10 @@ export function Navbar() {
         {/* CTA Button */}
         <div className="hidden md:flex gap-3">
           <Link
-            href="/login"
+            href="/admin/login"
             className="px-4 py-2 text-foreground hover:bg-muted rounded-lg transition-colors font-medium text-sm"
           >
-            Login
+            Admin
           </Link>
           <Link
             href="#contact"

@@ -67,11 +67,14 @@ export const heroApi = {
     apiCall(`/api/hero/${id}`, { method: 'PUT', body: JSON.stringify(data), token }),
   delete: (id: number, token: string) =>
     apiCall(`/api/hero/${id}`, { method: 'DELETE', token }),
+  updateOrder: (items: Array<{ id: number; order_index: number }>, token: string) =>
+    apiCall('/api/hero/reorder', { method: 'PUT', body: JSON.stringify({ items }), token }),
 };
 
 // About API
 export const aboutApi = {
   getAll: () => apiCall('/api/about'),
+  getById: (id: number) => apiCall(`/api/about/${id}`),
   create: (data: any, token: string) =>
     apiCall('/api/about', { method: 'POST', body: JSON.stringify(data), token }),
   update: (id: number, data: any, token: string) =>
@@ -84,6 +87,7 @@ export const aboutApi = {
 export const skillsApi = {
   getAll: (category?: string) =>
     apiCall(`/api/skills${category ? `?category=${category}` : ''}`),
+  getById: (id: number) => apiCall(`/api/skills/${id}`),
   create: (data: any, token: string) =>
     apiCall('/api/skills', { method: 'POST', body: JSON.stringify(data), token }),
   update: (id: number, data: any, token: string) =>
@@ -96,6 +100,7 @@ export const skillsApi = {
 export const projectsApi = {
   getAll: (featured?: boolean) =>
     apiCall(`/api/projects${featured !== undefined ? `?featured=${featured}` : ''}`),
+  getById: (id: number) => apiCall(`/api/projects/${id}`),
   create: (data: any, token: string) =>
     apiCall('/api/projects', { method: 'POST', body: JSON.stringify(data), token }),
   update: (id: number, data: any, token: string) =>
@@ -107,6 +112,7 @@ export const projectsApi = {
 // Experience API
 export const experienceApi = {
   getAll: () => apiCall('/api/experience'),
+  getById: (id: number) => apiCall(`/api/experience/${id}`),
   create: (data: any, token: string) =>
     apiCall('/api/experience', { method: 'POST', body: JSON.stringify(data), token }),
   update: (id: number, data: any, token: string) =>
@@ -118,6 +124,7 @@ export const experienceApi = {
 // Education API
 export const educationApi = {
   getAll: () => apiCall('/api/education'),
+  getById: (id: number) => apiCall(`/api/education/${id}`),
   create: (data: any, token: string) =>
     apiCall('/api/education', { method: 'POST', body: JSON.stringify(data), token }),
   update: (id: number, data: any, token: string) =>
@@ -151,6 +158,7 @@ export const blogApi = {
 // Testimonials API
 export const testimonialsApi = {
   getAll: () => apiCall('/api/testimonials'),
+  getById: (id: number) => apiCall(`/api/testimonials/${id}`),
   create: (data: any, token: string) =>
     apiCall('/api/testimonials', { method: 'POST', body: JSON.stringify(data), token }),
   update: (id: number, data: any, token: string) =>
@@ -162,6 +170,7 @@ export const testimonialsApi = {
 // Services API
 export const servicesApi = {
   getAll: () => apiCall('/api/services'),
+  getById: (id: number) => apiCall(`/api/services/${id}`),
   create: (data: any, token: string) =>
     apiCall('/api/services', { method: 'POST', body: JSON.stringify(data), token }),
   update: (id: number, data: any, token: string) =>
@@ -176,6 +185,10 @@ export const contactApi = {
     apiCall('/api/contact', { method: 'POST', body: JSON.stringify(data) }),
   getMessages: (token: string) =>
     apiCall('/api/contact-messages', { token }),
+  updateMessageStatus: (id: number, status: string, token: string) =>
+    apiCall(`/api/contact-messages/${id}`, { method: 'PUT', body: JSON.stringify({ status }), token }),
+  deleteMessage: (id: number, token: string) =>
+    apiCall(`/api/contact-messages/${id}`, { method: 'DELETE', token }),
 };
 
 // SEO API

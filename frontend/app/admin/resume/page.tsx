@@ -1,166 +1,303 @@
 'use client';
 
 import { AdminLayout } from '@/components/admin/layout';
-import { FileText, Download, Trash2, Check, Upload } from 'lucide-react';
-import { useState } from 'react';
-
-interface Resume {
-  id: string;
-  name: string;
-  uploadedAt: string;
-  size: string;
-  active: boolean;
-}
-
-const initialResumes: Resume[] = [
-  {
-    id: '1',
-    name: 'Resume_2024.pdf',
-    uploadedAt: '2024-01-15',
-    size: '2.4 MB',
-    active: true,
-  },
-  {
-    id: '2',
-    name: 'Resume_2023.pdf',
-    uploadedAt: '2023-12-01',
-    size: '2.1 MB',
-    active: false,
-  },
-];
+import { useEffect, useState } from 'react';
+import { useAuth } from '@/contexts/auth-context';
+import { api } from '@/lib/api';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Loader2, Upload, Download, Trash2, CheckCircle, FileText } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export default function ResumeManagerPage() {
-  const [resumes, setResumes] = useState(initialResumes);
-  const [isDragging, setIsDragging] = useState(false);
+  const { token } = useAuth();
+  const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
+  const [message, setMessage] = useState({ type: '', text: '' });
+  const [resumes, setResumes] = useState<any[]>([]);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const handleSetActive = (id: string) => {
-    setResumes(resumes.map(r => ({ ...r, active: r.id === id })));
+  useEffect(() => {
+    fetchResumes();
+  }, []);
+
+  const fetchResumes = async () => {
+    try {
+      const data = await api.resume.getAll();
+      setResumes(data || []);
+    } catch (error: any) {
+      setMessage({ type: 'error', text: error.message });
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleDelete = (id: string) => {
-    setResumes(resumes.filter(r => r.id !== id));
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.type !== 'application/pdf') {
+        setMessage({ type: 'error', text: 'Only PDF files are allowed' });
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        setMessage({ type: 'error', text: 'File size must be less than 5MB' });
+        return;
+      }
+      setSelectedFile(file);
+      setMessage({ type: '', text: '' });
+    }
   };
+
+  const handleUpload = async () => {
+    if (!selectedFile) return;
+
+    setUploading(true);
+    setMessage({ type: '', text: '' });
+
+    try {
+      await api.resume.upload(selectedFile, token!);
+      setMessage({ type: 'success', text: 'Resume uploaded successfully!' });
+      setSelectedFile(null);
+      fetchResumes();
+      // Reset file input
+      const fileInput = document.getElementById('resume-upload') as HTMLInputElement;
+      if (fileInput) fileInput.value = '';
+    } catch (error: any) {
+      setMessage({ type: 'error', text: error.message });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleActivate = async (id: number) => {
+    try {
+      await api.resume.activate(id, token!);
+      setMessage({ type: 'success', text: 'Resume activated!' });
+      fetchResumes();
+    } catch (error: any) {
+      setMessage({ type: 'error', text: error.message });
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    if (!confirm('Are you sure you want to delete this resume?')) return;
+
+    try {
+      await api.resume.delete(id, token!);
+      setMessage({ type: 'success', text: 'Resume deleted!' });
+      fetchResumes();
+    } catch (error: any) {
+      setMessage({ type: 'error', text: error.message });
+    }
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
+  };
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  };
+
+  if (loading) {
+    return (
+      <AdminLayout>
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-accent" />
+        </div>
+      </AdminLayout>
+    );
+  }
 
   return (
     <AdminLayout>
       <div className="space-y-6">
-        {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold text-foreground flex items-center gap-2">
-            <FileText size={32} />
-            Resume Manager
-          </h1>
-          <p className="text-muted-foreground mt-1">Upload and manage your resume files</p>
-        </div>
-
-        {/* Upload Area */}
-        <div
-          onDragOver={(e) => {
-            e.preventDefault();
-            setIsDragging(true);
-          }}
-          onDragLeave={() => setIsDragging(false)}
-          onDrop={(e) => {
-            e.preventDefault();
-            setIsDragging(false);
-          }}
-          className={`border-2 border-dashed rounded-lg p-12 text-center transition-colors ${isDragging ? 'border-accent bg-accent/10' : 'border-border hover:border-accent/50'}`}
-        >
-          <Upload size={48} className="mx-auto text-muted-foreground mb-3" />
-          <p className="text-lg font-medium text-foreground mb-1">Upload a new resume</p>
-          <p className="text-sm text-muted-foreground mb-4">
-            Drag and drop your PDF file here, or click to select
+          <h1 className="text-3xl font-bold text-foreground">Resume Manager</h1>
+          <p className="text-muted-foreground mt-1">
+            Upload and manage your resume versions
           </p>
-          <button className="px-6 py-2 bg-accent text-accent-foreground rounded-lg hover:bg-accent/90 transition-colors font-medium">
-            Choose File
-          </button>
-          <p className="text-xs text-muted-foreground mt-3">Supported formats: PDF (Max 10MB)</p>
         </div>
 
-        {/* Info Box */}
-        <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4 text-blue-600 dark:text-blue-400 text-sm">
-          <p className="font-medium mb-1">Active Resume</p>
-          <p>The active resume will be available for download from your portfolio website. You can have only one active resume at a time.</p>
-        </div>
+        {message.text && (
+          <Alert variant={message.type === 'error' ? 'destructive' : 'default'}>
+            <AlertDescription>{message.text}</AlertDescription>
+          </Alert>
+        )}
+
+        {/* Upload Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Upload className="h-5 w-5" />
+              Upload New Resume
+            </CardTitle>
+            <CardDescription>
+              Upload a PDF file (max 5MB). Only one resume can be active at a time.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center gap-4">
+              <div className="flex-1">
+                <input
+                  id="resume-upload"
+                  type="file"
+                  accept=".pdf"
+                  onChange={handleFileSelect}
+                  className="block w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-accent file:text-accent-foreground hover:file:bg-accent/90 cursor-pointer"
+                />
+              </div>
+              <Button
+                onClick={handleUpload}
+                disabled={!selectedFile || uploading}
+              >
+                {uploading ? (
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                ) : (
+                  <Upload className="h-4 w-4 mr-2" />
+                )}
+                Upload
+              </Button>
+            </div>
+            {selectedFile && (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <FileText className="h-4 w-4" />
+                <span>{selectedFile.name}</span>
+                <span className="text-xs">({formatFileSize(selectedFile.size)})</span>
+              </div>
+            )}
+          </CardContent>
+        </Card>
 
         {/* Resumes List */}
-        <div className="space-y-3">
-          <h3 className="text-lg font-semibold text-foreground">Your Resumes</h3>
+        <Card>
+          <CardHeader>
+            <CardTitle>Uploaded Resumes</CardTitle>
+            <CardDescription>
+              Manage your resume versions. The active resume will be available for download.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {resumes.length === 0 ? (
+              <div className="text-center py-12 text-muted-foreground">
+                <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                <p>No resumes uploaded yet.</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {resumes.map((resume) => (
+                  <div
+                    key={resume.id}
+                    className={`border rounded-lg p-4 ${
+                      resume.is_active ? 'border-accent bg-accent/5' : 'border-border'
+                    }`}
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3">
+                          <FileText className="h-5 w-5 text-accent" />
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <h4 className="font-semibold text-foreground">
+                                {resume.filename}
+                              </h4>
+                              {resume.is_active && (
+                                <span className="inline-flex items-center gap-1 text-xs px-2 py-1 bg-accent text-accent-foreground rounded-full">
+                                  <CheckCircle className="h-3 w-3" />
+                                  Active
+                                </span>
+                              )}
+                            </div>
+                            <div className="flex items-center gap-4 mt-1 text-sm text-muted-foreground">
+                              <span>Version {resume.version}</span>
+                              <span>{formatDate(resume.uploaded_at)}</span>
+                              {resume.file_size && (
+                                <span>{formatFileSize(resume.file_size)}</span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
 
-          {resumes.length === 0 ? (
-            <div className="bg-card border border-border rounded-lg p-8 text-center">
-              <FileText size={48} className="mx-auto text-muted-foreground mb-2" />
-              <p className="text-foreground font-medium mb-1">No resumes uploaded</p>
-              <p className="text-muted-foreground text-sm">Upload your first resume to get started</p>
-            </div>
-          ) : (
-            resumes.map(resume => (
-              <div
-                key={resume.id}
-                className={`flex items-center justify-between p-4 border rounded-lg transition-colors ${resume.active ? 'bg-accent/10 border-accent' : 'bg-card border-border hover:border-accent/50'}`}
-              >
-                <div className="flex items-center gap-4">
-                  <FileText size={24} className={resume.active ? 'text-accent' : 'text-muted-foreground'} />
-                  <div>
-                    <p className="font-medium text-foreground">{resume.name}</p>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
-                      <span>{resume.size}</span>
-                      <span>•</span>
-                      <span>Uploaded {resume.uploadedAt}</span>
-                      {resume.active && (
-                        <>
-                          <span>•</span>
-                          <span className="flex items-center gap-1 text-accent font-medium">
-                            <Check size={14} />
-                            Active
-                          </span>
-                        </>
-                      )}
+                      <div className="flex items-center gap-2">
+                        {!resume.is_active && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleActivate(resume.id)}
+                          >
+                            <CheckCircle className="h-4 w-4 mr-1" />
+                            Activate
+                          </Button>
+                        )}
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() =>
+                            window.open(api.resume.downloadUrl(resume.id), '_blank')
+                          }
+                        >
+                          <Download className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDelete(resume.id)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </div>
                   </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  {!resume.active && (
-                    <button
-                      onClick={() => handleSetActive(resume.id)}
-                      className="px-3 py-1 text-sm border border-border text-foreground rounded hover:bg-muted transition-colors font-medium"
-                    >
-                      Set Active
-                    </button>
-                  )}
-                  <button
-                    title="Download"
-                    className="p-2 text-muted-foreground hover:text-accent rounded-lg hover:bg-muted transition-colors"
-                  >
-                    <Download size={18} />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(resume.id)}
-                    title="Delete"
-                    className="p-2 text-muted-foreground hover:text-red-500 rounded-lg hover:bg-red-500/10 transition-colors"
-                  >
-                    <Trash2 size={18} />
-                  </button>
-                </div>
+                ))}
               </div>
-            ))
-          )}
-        </div>
+            )}
+          </CardContent>
+        </Card>
 
-        {/* Download Link */}
-        <div className="bg-card border border-border rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-foreground mb-3">Resume Download Link</h3>
-          <p className="text-muted-foreground text-sm mb-4">
-            Your active resume will be available at:
-          </p>
-          <div className="flex items-center gap-2 p-3 bg-input rounded-lg">
-            <code className="text-sm text-foreground flex-1">yourportfolio.com/resume.pdf</code>
-            <button className="px-3 py-1 text-sm bg-accent text-accent-foreground rounded hover:bg-accent/90 transition-colors font-medium">
-              Copy
-            </button>
-          </div>
-        </div>
+        {/* Download Active Resume */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Public Download Link</CardTitle>
+            <CardDescription>
+              Share this link with recruiters and on your portfolio
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-2">
+              <Input
+                value={`${window.location.origin}${api.resume.downloadActiveUrl()}`}
+                readOnly
+                className="flex-1"
+              />
+              <Button
+                variant="outline"
+                onClick={() => {
+                  navigator.clipboard.writeText(
+                    `${window.location.origin}${api.resume.downloadActiveUrl()}`
+                  );
+                  setMessage({ type: 'success', text: 'Link copied to clipboard!' });
+                }}
+              >
+                Copy
+              </Button>
+              <Button
+                onClick={() =>
+                  window.open(api.resume.downloadActiveUrl(), '_blank')
+                }
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Download
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </AdminLayout>
   );

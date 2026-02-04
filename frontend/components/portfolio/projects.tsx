@@ -53,15 +53,15 @@ export function Projects({ data }: ProjectsProps) {
                 <h3 className="text-xl font-semibold text-foreground">{project.title}</h3>
                 <p className="text-muted-foreground text-sm line-clamp-3">{project.description}</p>
 
-                {/* Tags */}
-                {project.tags && (
+                {/* Technologies */}
+                {project.technologies && (
                   <div className="flex flex-wrap gap-2">
-                    {project.tags.split(',').slice(0, 3).map((tag: string, i: number) => (
+                    {project.technologies.split(',').slice(0, 3).map((tech: string, i: number) => (
                       <span
                         key={i}
                         className="px-2 py-1 bg-accent/10 text-accent rounded text-xs"
                       >
-                        {tag.trim()}
+                        {tech.trim()}
                       </span>
                     ))}
                   </div>

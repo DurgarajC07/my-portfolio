@@ -1,220 +1,381 @@
 'use client';
 
 import { AdminLayout } from '@/components/admin/layout';
-import { Save, Upload, Moon, Sun } from 'lucide-react';
-import { useState } from 'react';
-
-const defaultColors = {
-  primary: '#06b6d4',
-  secondary: '#0891b2',
-  accent: '#06b6d4',
-  background: '#0f1419',
-  foreground: '#e8eaed',
-};
+import { useEffect, useState } from 'react';
+import { useAuth } from '@/contexts/auth-context';
+import { api } from '@/lib/api';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Textarea } from '@/components/ui/textarea';
+import { Loader2, Save, RefreshCw, Palette } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export default function ThemeManagerPage() {
-  const [colors, setColors] = useState(defaultColors);
-  const [darkMode, setDarkMode] = useState(true);
-  const [fontFamily, setFontFamily] = useState('Inter');
+  const { token } = useAuth();
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState({ type: '', text: '' });
+  const [googleFonts, setGoogleFonts] = useState<string[]>([]);
 
-  const handleColorChange = (key: string, value: string) => {
-    setColors(prev => ({ ...prev, [key]: value }));
+  const [themeData, setThemeData] = useState<any>({
+    primary_color: '#3b82f6',
+    secondary_color: '#8b5cf6',
+    accent_color: '#10b981',
+    font_primary: 'Inter',
+    font_secondary: 'Inter',
+    font_code: 'JetBrains Mono',
+    dark_mode: true,
+    custom_css: '',
+    logo_url: '',
+    favicon_url: '',
+  });
+
+  useEffect(() => {
+    fetchData();
+    fetchGoogleFonts();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const theme = await api.theme.get();
+      setThemeData(theme);
+    } catch (error: any) {
+      setMessage({ type: 'error', text: error.message });
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const fetchGoogleFonts = async () => {
+    try {
+      const response = await api.theme.getGoogleFonts();
+      setGoogleFonts(response.fonts || []);
+    } catch (error) {
+      console.error('Failed to fetch Google Fonts:', error);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+    setMessage({ type: '', text: '' });
+
+    try {
+      await api.theme.update(themeData, token!);
+      setMessage({ type: 'success', text: 'Theme settings saved successfully!' });
+      fetchData();
+    } catch (error: any) {
+      setMessage({ type: 'error', text: error.message });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleReset = async () => {
+    if (!confirm('Are you sure you want to reset to default theme?')) return;
+
+    try {
+      setSaving(true);
+      await api.theme.reset(token!);
+      setMessage({ type: 'success', text: 'Theme reset to default!' });
+      fetchData();
+    } catch (error: any) {
+      setMessage({ type: 'error', text: error.message });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <AdminLayout>
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-accent" />
+        </div>
+      </AdminLayout>
+    );
+  }
 
   return (
     <AdminLayout>
-      <div className="space-y-6">
-        {/* Header */}
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Theme Manager</h1>
-          <p className="text-muted-foreground mt-1">Customize your portfolio appearance</p>
-        </div>
-
-        {/* Mode Toggle */}
-        <div className="bg-card border border-border rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-foreground mb-4">Appearance Mode</h3>
-
-          <div className="flex gap-4">
-            <button
-              onClick={() => setDarkMode(false)}
-              className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-colors ${!darkMode ? 'bg-accent text-accent-foreground' : 'bg-muted text-foreground hover:bg-muted/80'}`}
-            >
-              <Sun size={20} />
-              Light Mode
-            </button>
-            <button
-              onClick={() => setDarkMode(true)}
-              className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-colors ${darkMode ? 'bg-accent text-accent-foreground' : 'bg-muted text-foreground hover:bg-muted/80'}`}
-            >
-              <Moon size={20} />
-              Dark Mode
-            </button>
-            <button className="flex items-center gap-2 px-6 py-3 rounded-lg font-medium bg-muted text-foreground hover:bg-muted/80 transition-colors">
-              System Default
-            </button>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-foreground">Theme Manager</h1>
+            <p className="text-muted-foreground mt-1">Customize your portfolio appearance</p>
+          </div>
+          <div className="flex gap-2">
+            <Button type="button" variant="outline" onClick={handleReset} disabled={saving}>
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Reset to Default
+            </Button>
+            <Button type="submit" disabled={saving}>
+              {saving ? (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              ) : (
+                <Save className="h-4 w-4 mr-2" />
+              )}
+              Save Changes
+            </Button>
           </div>
         </div>
 
-        {/* Colors */}
+        {message.text && (
+          <Alert variant={message.type === 'error' ? 'destructive' : 'default'}>
+            <AlertDescription>{message.text}</AlertDescription>
+          </Alert>
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Color Picker */}
-          <div className="bg-card border border-border rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-foreground mb-4">Color Scheme</h3>
-
-            <div className="space-y-4">
-              {Object.entries(colors).map(([key, value]) => (
-                <div key={key}>
-                  <div className="flex items-center justify-between mb-2">
-                    <label className="text-sm font-medium text-foreground capitalize">
-                      {key}
-                    </label>
-                    <span className="text-xs text-muted-foreground">{value}</span>
-                  </div>
-                  <div className="flex gap-3">
-                    <input
-                      type="color"
-                      value={value}
-                      onChange={(e) => handleColorChange(key, e.target.value)}
-                      className="w-12 h-10 rounded-lg cursor-pointer border border-border"
-                    />
-                    <input
-                      type="text"
-                      value={value}
-                      onChange={(e) => handleColorChange(key, e.target.value)}
-                      className="flex-1 px-3 py-2 bg-input border border-border rounded-md text-foreground focus:outline-none focus:ring-2 focus:ring-accent"
-                    />
-                  </div>
+          {/* Colors */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Palette className="h-5 w-5" />
+                Colors
+              </CardTitle>
+              <CardDescription>Configure your brand colors</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label>Primary Color</Label>
+                <div className="flex gap-2 mt-1">
+                  <Input
+                    type="color"
+                    value={themeData.primary_color || '#3b82f6'}
+                    onChange={(e) => setThemeData({ ...themeData, primary_color: e.target.value })}
+                    className="w-20 h-10 cursor-pointer"
+                  />
+                  <Input
+                    type="text"
+                    value={themeData.primary_color || '#3b82f6'}
+                    onChange={(e) => setThemeData({ ...themeData, primary_color: e.target.value })}
+                    className="flex-1"
+                  />
                 </div>
-              ))}
-            </div>
+              </div>
 
-            <button className="w-full mt-6 flex items-center justify-center gap-2 px-4 py-2 bg-accent text-accent-foreground rounded-lg hover:bg-accent/90 transition-colors font-medium">
-              <Save size={18} />
-              Save Colors
-            </button>
-          </div>
+              <div>
+                <Label>Secondary Color</Label>
+                <div className="flex gap-2 mt-1">
+                  <Input
+                    type="color"
+                    value={themeData.secondary_color || '#8b5cf6'}
+                    onChange={(e) => setThemeData({ ...themeData, secondary_color: e.target.value })}
+                    className="w-20 h-10 cursor-pointer"
+                  />
+                  <Input
+                    type="text"
+                    value={themeData.secondary_color || '#8b5cf6'}
+                    onChange={(e) => setThemeData({ ...themeData, secondary_color: e.target.value })}
+                    className="flex-1"
+                  />
+                </div>
+              </div>
 
-          {/* Preview */}
-          <div className="bg-card border border-border rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-foreground mb-4">Preview</h3>
+              <div>
+                <Label>Accent Color</Label>
+                <div className="flex gap-2 mt-1">
+                  <Input
+                    type="color"
+                    value={themeData.accent_color || '#10b981'}
+                    onChange={(e) => setThemeData({ ...themeData, accent_color: e.target.value })}
+                    className="w-20 h-10 cursor-pointer"
+                  />
+                  <Input
+                    type="text"
+                    value={themeData.accent_color || '#10b981'}
+                    onChange={(e) => setThemeData({ ...themeData, accent_color: e.target.value })}
+                    className="flex-1"
+                  />
+                </div>
+              </div>
 
-            <div
-              className="rounded-lg p-8 mb-4 text-white"
-              style={{
-                backgroundColor: colors.primary,
-              }}
-            >
-              <p className="font-bold text-lg mb-2">Primary Color</p>
-              <p className="text-sm opacity-90">This is your brand color</p>
-            </div>
+              <div className="pt-4">
+                <div className="flex items-center gap-2">
+                  <Switch
+                    checked={themeData.dark_mode ?? true}
+                    onCheckedChange={(checked) => setThemeData({ ...themeData, dark_mode: checked })}
+                  />
+                  <Label>Enable Dark Mode</Label>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
-            <div
-              className="rounded-lg p-6 mb-4 flex flex-col gap-3"
-              style={{
-                backgroundColor: colors.background,
-                color: colors.foreground,
-                border: `1px solid ${colors.secondary}`,
-              }}
-            >
-              <p className="font-bold">Card Preview</p>
-              <button
-                className="px-4 py-2 rounded font-medium w-fit transition-opacity hover:opacity-80"
-                style={{
-                  backgroundColor: colors.accent,
-                  color: '#fff',
-                }}
-              >
-                Action Button
-              </button>
-            </div>
+          {/* Fonts */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Typography</CardTitle>
+              <CardDescription>Select fonts for your portfolio</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label>Primary Font</Label>
+                <Select
+                  value={themeData.font_primary || 'Inter'}
+                  onValueChange={(value) => setThemeData({ ...themeData, font_primary: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {googleFonts.map((font) => (
+                      <SelectItem key={font} value={font}>
+                        {font}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
 
-            <p className="text-xs text-muted-foreground">
-              Colors are being applied in real-time
-            </p>
-          </div>
+              <div>
+                <Label>Secondary Font</Label>
+                <Select
+                  value={themeData.font_secondary || 'Inter'}
+                  onValueChange={(value) => setThemeData({ ...themeData, font_secondary: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {googleFonts.map((font) => (
+                      <SelectItem key={font} value={font}>
+                        {font}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label>Code Font</Label>
+                <Select
+                  value={themeData.font_code || 'JetBrains Mono'}
+                  onValueChange={(value) => setThemeData({ ...themeData, font_code: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="JetBrains Mono">JetBrains Mono</SelectItem>
+                    <SelectItem value="Fira Code">Fira Code</SelectItem>
+                    <SelectItem value="Source Code Pro">Source Code Pro</SelectItem>
+                    <SelectItem value="Monaco">Monaco</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Branding */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Branding</CardTitle>
+              <CardDescription>Logo and favicon URLs</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label>Logo URL</Label>
+                <Input
+                  value={themeData.logo_url || ''}
+                  onChange={(e) => setThemeData({ ...themeData, logo_url: e.target.value })}
+                  placeholder="https://example.com/logo.png"
+                />
+                {themeData.logo_url && (
+                  <div className="mt-2">
+                    <img
+                      src={themeData.logo_url}
+                      alt="Logo preview"
+                      className="max-h-16 object-contain"
+                      onError={(e) => (e.currentTarget.style.display = 'none')}
+                    />
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <Label>Favicon URL</Label>
+                <Input
+                  value={themeData.favicon_url || ''}
+                  onChange={(e) => setThemeData({ ...themeData, favicon_url: e.target.value })}
+                  placeholder="https://example.com/favicon.ico"
+                />
+                {themeData.favicon_url && (
+                  <div className="mt-2">
+                    <img
+                      src={themeData.favicon_url}
+                      alt="Favicon preview"
+                      className="max-h-8 object-contain"
+                      onError={(e) => (e.currentTarget.style.display = 'none')}
+                    />
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Custom CSS */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Custom CSS</CardTitle>
+              <CardDescription>Add custom styles (Advanced)</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Textarea
+                value={themeData.custom_css || ''}
+                onChange={(e) => setThemeData({ ...themeData, custom_css: e.target.value })}
+                placeholder=".custom-class { color: red; }"
+                rows={10}
+                className="font-mono text-sm"
+              />
+            </CardContent>
+          </Card>
         </div>
 
-        {/* Typography */}
-        <div className="bg-card border border-border rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-foreground mb-4">Typography</h3>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <div>
-              <label className="block text-sm font-medium text-foreground mb-2">
-                Heading Font
-              </label>
-              <select className="w-full px-3 py-2 bg-input border border-border rounded-md text-foreground focus:outline-none focus:ring-2 focus:ring-accent">
-                <option>Inter</option>
-                <option>Poppins</option>
-                <option>Sora</option>
-                <option>Playfair Display</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-foreground mb-2">
-                Body Font
-              </label>
-              <select className="w-full px-3 py-2 bg-input border border-border rounded-md text-foreground focus:outline-none focus:ring-2 focus:ring-accent">
-                <option>Inter</option>
-                <option>Roboto</option>
-                <option>Open Sans</option>
-                <option>Lato</option>
-              </select>
-            </div>
-          </div>
-
-          <button className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-accent text-accent-foreground rounded-lg hover:bg-accent/90 transition-colors font-medium">
-            <Save size={18} />
-            Save Typography
-          </button>
-        </div>
-
-        {/* Logo & Favicon */}
-        <div className="bg-card border border-border rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-foreground mb-4">Branding</h3>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-foreground mb-3">
-                Logo
-              </label>
-              <div className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-accent transition-colors cursor-pointer">
-                <Upload size={32} className="mx-auto text-muted-foreground mb-2" />
-                <p className="text-sm text-muted-foreground">Drag and drop or click to upload</p>
-                <p className="text-xs text-muted-foreground mt-1">PNG, SVG, JPG (Max 5MB)</p>
+        {/* Color Preview */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Preview</CardTitle>
+            <CardDescription>See how your colors look</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <div
+                  className="h-20 rounded-lg flex items-center justify-center text-white font-semibold"
+                  style={{ backgroundColor: themeData.primary_color }}
+                >
+                  Primary
+                </div>
+                <p className="text-sm text-center text-muted-foreground">{themeData.primary_color}</p>
+              </div>
+              <div className="space-y-2">
+                <div
+                  className="h-20 rounded-lg flex items-center justify-center text-white font-semibold"
+                  style={{ backgroundColor: themeData.secondary_color }}
+                >
+                  Secondary
+                </div>
+                <p className="text-sm text-center text-muted-foreground">{themeData.secondary_color}</p>
+              </div>
+              <div className="space-y-2">
+                <div
+                  className="h-20 rounded-lg flex items-center justify-center text-white font-semibold"
+                  style={{ backgroundColor: themeData.accent_color }}
+                >
+                  Accent
+                </div>
+                <p className="text-sm text-center text-muted-foreground">{themeData.accent_color}</p>
               </div>
             </div>
-
-            <div>
-              <label className="block text-sm font-medium text-foreground mb-3">
-                Favicon
-              </label>
-              <div className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-accent transition-colors cursor-pointer">
-                <Upload size={32} className="mx-auto text-muted-foreground mb-2" />
-                <p className="text-sm text-muted-foreground">Drag and drop or click to upload</p>
-                <p className="text-xs text-muted-foreground mt-1">PNG, ICO (32x32px)</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Custom CSS */}
-        <div className="bg-card border border-border rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-foreground mb-4">Custom CSS</h3>
-
-          <textarea
-            placeholder="Add custom CSS rules here..."
-            rows={8}
-            className="w-full px-3 py-2 bg-input border border-border rounded-md text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent font-mono text-sm"
-          />
-
-          <button className="w-full mt-3 flex items-center justify-center gap-2 px-4 py-2 bg-accent text-accent-foreground rounded-lg hover:bg-accent/90 transition-colors font-medium">
-            <Save size={18} />
-            Save Custom CSS
-          </button>
-        </div>
-      </div>
+          </CardContent>
+        </Card>
+      </form>
     </AdminLayout>
   );
 }
