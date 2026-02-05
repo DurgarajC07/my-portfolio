@@ -4,18 +4,12 @@ import { MapPin } from 'lucide-react';
 
 interface AboutProps {
   data: any;
-  skills: any[];
 }
 
-export function About({ data, skills }: AboutProps) {
+export function About({ data }: AboutProps) {
   if (!data) return null;
 
   const stats = data.stats ? JSON.parse(data.stats) : {};
-  const skillsByCategory = skills.reduce((acc: any, skill: any) => {
-    if (!acc[skill.category]) acc[skill.category] = [];
-    acc[skill.category].push(skill);
-    return acc;
-  }, {});
 
   return (
     <section id="about" className="py-20 bg-card/50">
@@ -68,30 +62,6 @@ export function About({ data, skills }: AboutProps) {
             )}
           </div>
         </div>
-
-        {/* Skills Grid */}
-        {skills.length > 0 && (
-          <div className="mt-16">
-            <h3 className="text-2xl font-bold text-foreground mb-8 text-center">Skills & Tools</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {Object.entries(skillsByCategory).map(([category, categorySkills]: any, i) => (
-                <div key={i} className="bg-background border border-border rounded-lg p-6">
-                  <h4 className="font-semibold text-foreground mb-3">{category}</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {categorySkills.map((skill: any, j: number) => (
-                      <span
-                        key={j}
-                        className="px-3 py-1 bg-accent/10 text-accent rounded-full text-sm font-medium"
-                      >
-                        {skill.name}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     </section>
   );

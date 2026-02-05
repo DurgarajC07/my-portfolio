@@ -37,28 +37,28 @@ def populate_data():
 
         # 3. Skills
         skills = [
-            ('Programming', 'Python', 95, 'code', 1),
-            ('Framework', 'FastAPI', 90, 'zap', 2),
-            ('Framework', 'Flask', 85, 'server', 3),
-            ('Framework', 'Django', 80, 'database', 4),
-            ('Frontend', 'React', 85, 'layout', 5),
-            ('Programming', 'JavaScript', 85, 'code', 6),
-            ('Backend', 'REST APIs', 95, 'link', 7),
-            ('Backend', 'WebSockets', 85, 'radio', 8),
-            ('Database', 'Redis', 85, 'database', 9),
-            ('Database', 'MySQL', 90, 'database', 10),
-            ('Database', 'SQLite', 85, 'database', 11),
-            ('Database', 'MongoDB', 80, 'database', 12),
-            ('Cloud', 'AWS', 85, 'cloud', 13),
-            ('Cloud', 'Azure', 75, 'cloud', 14),
-            ('DevOps', 'Docker', 90, 'box', 15),
-            ('Version Control', 'Git', 95, 'git-branch', 16),
-            ('AI/ML', 'LLMs', 95, 'brain', 17),
-            ('AI/ML', 'Agentic AI', 90, 'cpu', 18),
-            ('AI/ML', 'GenAI', 90, 'sparkles', 19),
-            ('AI/ML', 'Computer Vision', 85, 'eye', 20),
-            ('AI/ML', 'NLP', 85, 'message-square', 21),
-            ('AI/ML', 'OpenCV', 85, 'camera', 22),
+            ('Programming', 'Python', 95, 'Code', 1),
+            ('Framework', 'FastAPI', 90, 'Zap', 2),
+            ('Framework', 'Flask', 85, 'Server', 3),
+            ('Framework', 'Django', 80, 'Database', 4),
+            ('Frontend', 'React', 85, 'Layout', 5),
+            ('Programming', 'JavaScript', 85, 'FileCode', 6),
+            ('Backend', 'REST APIs', 95, 'Globe', 7),
+            ('Backend', 'WebSockets', 85, 'Terminal', 8),
+            ('Database', 'Redis', 85, 'Database', 9),
+            ('Database', 'MySQL', 90, 'Database', 10),
+            ('Database', 'SQLite', 85, 'Database', 11),
+            ('Database', 'MongoDB', 80, 'Database', 12),
+            ('Cloud', 'AWS', 85, 'Server', 13),
+            ('Cloud', 'Azure', 75, 'Server', 14),
+            ('DevOps', 'Docker', 90, 'Box', 15),
+            ('Version Control', 'Git', 95, 'GitBranch', 16),
+            ('AI/ML', 'LLMs', 95, 'Cpu', 17),
+            ('AI/ML', 'Agentic AI', 90, 'Layers', 18),
+            ('AI/ML', 'GenAI', 90, 'Code', 19),
+            ('AI/ML', 'Computer Vision', 85, 'Monitor', 20),
+            ('AI/ML', 'NLP', 85, 'FileCode', 21),
+            ('AI/ML', 'OpenCV', 85, 'Monitor', 22),
         ]
         
         for category, name, level, icon, order in skills:
@@ -212,42 +212,42 @@ Delivered multiple client projects independently and received 3× Employee of th
             (
                 'LLM & Generative AI Solutions',
                 'Design and deploy production-ready LLM-powered applications, RAG pipelines, and agentic AI systems.',
-                'brain',
+                'Cpu',
                 1,
                 1
             ),
             (
                 'AI Chatbot & Callbot Development',
                 'Build context-aware conversational AI systems with seamless voice and chat capabilities.',
-                'message-square',
+                'MessageSquare',
                 1,
                 2
             ),
             (
                 'Computer Vision Solutions',
                 'Develop custom CV pipelines for object detection, face recognition, and document processing.',
-                'eye',
+                'Monitor',
                 1,
                 3
             ),
             (
                 'Backend API Development',
                 'Create scalable REST APIs and microservices using FastAPI, Flask, and Django.',
-                'server',
+                'Server',
                 1,
                 4
             ),
             (
                 'AI Automation & Integration',
                 'Automate workflows with AI agents, reduce manual tasks, and integrate AI into existing systems.',
-                'zap',
+                'Zap',
                 1,
                 5
             ),
             (
                 'Cloud Deployment & DevOps',
                 'Deploy and scale applications using Docker, AWS, and CI/CD pipelines.',
-                'cloud',
+                'Globe',
                 1,
                 6
             ),

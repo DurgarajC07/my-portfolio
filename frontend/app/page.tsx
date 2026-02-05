@@ -68,7 +68,7 @@ export default async function Home() {
       <Navbar />
       <main className="min-h-screen">
         <Hero data={data.hero} />
-        <About data={data.about} skills={data.skills} />
+        <About data={data.about} />
         <Skills data={data.skills} />
         <Projects data={data.projects} />
         <Experience data={data.experience} />

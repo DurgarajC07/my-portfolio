@@ -1,8 +1,35 @@
 'use client';
 
+import { 
+  Code, Database, Server, Globe, Layers, Terminal,
+  Cpu, Box, Package, Settings, Wrench,
+  Smartphone, Monitor, Layout, Palette, FileCode, GitBranch
+} from 'lucide-react';
+
 interface SkillsProps {
   data: any[];
 }
+
+// Icon mapping
+const iconMap: { [key: string]: any } = {
+  'Code': Code,
+  'Database': Database,
+  'Server': Server,
+  'Globe': Globe,
+  'Layers': Layers,
+  'Terminal': Terminal,
+  'Cpu': Cpu,
+  'Box': Box,
+  'Package': Package,
+  'Settings': Settings,
+  'Wrench': Wrench,
+  'Smartphone': Smartphone,
+  'Monitor': Monitor,
+  'Layout': Layout,
+  'Palette': Palette,
+  'FileCode': FileCode,
+  'GitBranch': GitBranch,
+};
 
 export function Skills({ data }: SkillsProps) {
   if (!data || data.length === 0) return null;
@@ -40,12 +67,13 @@ export function Skills({ data }: SkillsProps) {
                   >
                     <div className="flex items-center gap-3 mb-2">
                       {skill.icon && (
-                        <div className="w-8 h-8 flex items-center justify-center">
+                        <div className="w-8 h-8 flex items-center justify-center text-accent">
                           {skill.icon.startsWith('http') ? (
                             <img src={skill.icon} alt={skill.name} className="w-full h-full object-contain" />
-                          ) : (
-                            <span className="text-2xl">{skill.icon}</span>
-                          )}
+                          ) : (() => {
+                            const IconComponent = iconMap[skill.icon] || Code;
+                            return <IconComponent className="w-6 h-6" />;
+                          })()}
                         </div>
                       )}
                       <h4 className="font-medium text-foreground">{skill.name}</h4>

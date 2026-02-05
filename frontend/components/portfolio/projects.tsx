@@ -54,9 +54,9 @@ export function Projects({ data }: ProjectsProps) {
                 <p className="text-muted-foreground text-sm line-clamp-3">{project.description}</p>
 
                 {/* Technologies */}
-                {project.technologies && (
+                {project.tags && (
                   <div className="flex flex-wrap gap-2">
-                    {project.technologies.split(',').slice(0, 3).map((tech: string, i: number) => (
+                    {project.tags.split(',').slice(0, 3).map((tech: string, i: number) => (
                       <span
                         key={i}
                         className="px-2 py-1 bg-accent/10 text-accent rounded text-xs"

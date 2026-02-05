@@ -1,10 +1,41 @@
 'use client';
 
-import { Check } from 'lucide-react';
+import { 
+  Check, Code, Palette, Smartphone, Globe, Server, Database,
+  Layout, Briefcase, Zap, Target, TrendingUp, Users, 
+  ShoppingCart, MessageSquare, Search, BarChart, Layers,
+  FileCode, Settings, Wrench, Package, Monitor
+} from 'lucide-react';
 
 interface ServicesProps {
   data: any[];
 }
+
+// Icon mapping for services
+const iconMap: { [key: string]: any } = {
+  'Code': Code,
+  'Palette': Palette,
+  'Smartphone': Smartphone,
+  'Globe': Globe,
+  'Server': Server,
+  'Database': Database,
+  'Layout': Layout,
+  'Briefcase': Briefcase,
+  'Zap': Zap,
+  'Target': Target,
+  'TrendingUp': TrendingUp,
+  'Users': Users,
+  'ShoppingCart': ShoppingCart,
+  'MessageSquare': MessageSquare,
+  'Search': Search,
+  'BarChart': BarChart,
+  'Layers': Layers,
+  'FileCode': FileCode,
+  'Settings': Settings,
+  'Wrench': Wrench,
+  'Package': Package,
+  'Monitor': Monitor,
+};
 
 export function Services({ data }: ServicesProps) {
   if (!data || data.length === 0) return null;
@@ -45,12 +76,13 @@ export function Services({ data }: ServicesProps) {
               >
                 <div className="flex items-center gap-4 mb-4">
                   {service.icon && (
-                    <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center shrink-0">
+                    <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center shrink-0 text-accent">
                       {service.icon.startsWith('http') ? (
                         <img src={service.icon} alt={service.title} className="w-8 h-8 object-contain" />
-                      ) : (
-                        <span className="text-2xl">{service.icon}</span>
-                      )}
+                      ) : (() => {
+                        const IconComponent = iconMap[service.icon] || Code;
+                        return <IconComponent className="w-7 h-7" />;
+                      })()}
                     </div>
                   )}
                   <h3 className="text-xl font-bold text-foreground">{service.title}</h3>

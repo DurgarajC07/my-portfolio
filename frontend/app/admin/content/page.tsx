@@ -119,8 +119,9 @@ export default function ContentManagerPage() {
       projects: {
         title: '',
         description: '',
+        long_description: '',
         image_url: '',
-        technologies: '',
+        tags: '',
         github_url: '',
         live_url: '',
         featured: false,
@@ -129,8 +130,9 @@ export default function ContentManagerPage() {
       },
       experience: {
         company: '',
-        position: '',
+        title: '',
         description: '',
+        technologies: '',
         start_date: '',
         end_date: '',
         location: '',
@@ -141,7 +143,6 @@ export default function ContentManagerPage() {
       education: {
         institution: '',
         degree: '',
-        field: '',
         description: '',
         start_date: '',
         end_date: '',
@@ -232,23 +233,23 @@ export default function ContentManagerPage() {
     const fields: any = {
       hero: (
         <>
-          <div>
-            <Label>Title *</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Title *</Label>
             <Input
               value={formData.title || ''}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               required
             />
           </div>
-          <div>
-            <Label>Subtitle</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Subtitle</Label>
             <Input
               value={formData.subtitle || ''}
               onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
             />
           </div>
-          <div>
-            <Label>Description</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Description</Label>
             <Textarea
               value={formData.description || ''}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -256,23 +257,23 @@ export default function ContentManagerPage() {
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label>CTA Text</Label>
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">CTA Text</Label>
               <Input
                 value={formData.cta_text || ''}
                 onChange={(e) => setFormData({ ...formData, cta_text: e.target.value })}
               />
             </div>
-            <div>
-              <Label>CTA Link</Label>
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">CTA Link</Label>
               <Input
                 value={formData.cta_link || ''}
                 onChange={(e) => setFormData({ ...formData, cta_link: e.target.value })}
               />
             </div>
           </div>
-          <div>
-            <Label>Social Links (JSON)</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Social Links (JSON)</Label>
             <Textarea
               value={formData.social_links || '{}'}
               onChange={(e) => setFormData({ ...formData, social_links: e.target.value })}
@@ -280,26 +281,26 @@ export default function ContentManagerPage() {
               rows={3}
             />
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 pt-2">
             <Switch
               checked={formData.visible ?? true}
               onCheckedChange={(checked) => setFormData({ ...formData, visible: checked })}
             />
-            <Label>Visible</Label>
+            <Label className="text-sm font-medium">Visible</Label>
           </div>
         </>
       ),
       about: (
         <>
-          <div>
-            <Label>Title</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Title</Label>
             <Input
               value={formData.title || ''}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
             />
           </div>
-          <div>
-            <Label>Description *</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Description *</Label>
             <Textarea
               value={formData.description || ''}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -307,22 +308,22 @@ export default function ContentManagerPage() {
               required
             />
           </div>
-          <div>
-            <Label>Image URL</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Image URL</Label>
             <Input
               value={formData.image_url || ''}
               onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
             />
           </div>
-          <div>
-            <Label>Location</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Location</Label>
             <Input
               value={formData.location || ''}
               onChange={(e) => setFormData({ ...formData, location: e.target.value })}
             />
           </div>
-          <div>
-            <Label>Stats (JSON)</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Stats (JSON)</Label>
             <Textarea
               value={formData.stats || '{}'}
               onChange={(e) => setFormData({ ...formData, stats: e.target.value })}
@@ -330,19 +331,19 @@ export default function ContentManagerPage() {
               rows={3}
             />
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 pt-2">
             <Switch
               checked={formData.visible ?? true}
               onCheckedChange={(checked) => setFormData({ ...formData, visible: checked })}
             />
-            <Label>Visible</Label>
+            <Label className="text-sm font-medium">Visible</Label>
           </div>
         </>
       ),
       skills: (
         <>
-          <div>
-            <Label>Category *</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Category *</Label>
             <Input
               value={formData.category || ''}
               onChange={(e) => setFormData({ ...formData, category: e.target.value })}
@@ -350,16 +351,16 @@ export default function ContentManagerPage() {
               required
             />
           </div>
-          <div>
-            <Label>Name *</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Name *</Label>
             <Input
               value={formData.name || ''}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
             />
           </div>
-          <div>
-            <Label>Level (0-100)</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Level (0-100)</Label>
             <Input
               type="number"
               min="0"
@@ -368,128 +369,144 @@ export default function ContentManagerPage() {
               onChange={(e) => setFormData({ ...formData, level: parseInt(e.target.value) })}
             />
           </div>
-          <div>
-            <Label>Icon</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Icon</Label>
             <Input
               value={formData.icon || ''}
               onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
               placeholder="Icon name or URL"
             />
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 pt-2">
             <Switch
               checked={formData.visible ?? true}
               onCheckedChange={(checked) => setFormData({ ...formData, visible: checked })}
             />
-            <Label>Visible</Label>
+            <Label className="text-sm font-medium">Visible</Label>
           </div>
         </>
       ),
       projects: (
         <>
-          <div>
-            <Label>Title *</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Title *</Label>
             <Input
               value={formData.title || ''}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               required
             />
           </div>
-          <div>
-            <Label>Description *</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Description *</Label>
             <Textarea
               value={formData.description || ''}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              rows={4}
+              rows={3}
               required
             />
           </div>
-          <div>
-            <Label>Image URL</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Long Description</Label>
+            <Textarea
+              value={formData.long_description || ''}
+              onChange={(e) => setFormData({ ...formData, long_description: e.target.value })}
+              rows={4}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Image URL</Label>
             <Input
               value={formData.image_url || ''}
               onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
             />
           </div>
-          <div>
-            <Label>Technologies (comma-separated)</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Tags (comma-separated)</Label>
             <Input
-              value={formData.technologies || ''}
-              onChange={(e) => setFormData({ ...formData, technologies: e.target.value })}
+              value={formData.tags || ''}
+              onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
               placeholder="React, Node.js, MongoDB"
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label>GitHub URL</Label>
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">GitHub URL</Label>
               <Input
                 value={formData.github_url || ''}
                 onChange={(e) => setFormData({ ...formData, github_url: e.target.value })}
               />
             </div>
-            <div>
-              <Label>Live URL</Label>
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">Live URL</Label>
               <Input
                 value={formData.live_url || ''}
                 onChange={(e) => setFormData({ ...formData, live_url: e.target.value })}
               />
             </div>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 pt-2">
             <div className="flex items-center gap-2">
               <Switch
                 checked={formData.featured ?? false}
                 onCheckedChange={(checked) => setFormData({ ...formData, featured: checked })}
               />
-              <Label>Featured</Label>
+              <Label className="text-sm font-medium">Featured</Label>
             </div>
             <div className="flex items-center gap-2">
               <Switch
                 checked={formData.visible ?? true}
                 onCheckedChange={(checked) => setFormData({ ...formData, visible: checked })}
               />
-              <Label>Visible</Label>
+              <Label className="text-sm font-medium">Visible</Label>
             </div>
           </div>
         </>
       ),
       experience: (
         <>
-          <div>
-            <Label>Company *</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Company *</Label>
             <Input
               value={formData.company || ''}
               onChange={(e) => setFormData({ ...formData, company: e.target.value })}
               required
             />
           </div>
-          <div>
-            <Label>Position *</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Title *</Label>
             <Input
-              value={formData.position || ''}
-              onChange={(e) => setFormData({ ...formData, position: e.target.value })}
+              value={formData.title || ''}
+              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               required
             />
           </div>
-          <div>
-            <Label>Description</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Description</Label>
             <Textarea
               value={formData.description || ''}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               rows={4}
             />
           </div>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Technologies (comma-separated)</Label>
+            <Input
+              value={formData.technologies || ''}
+              onChange={(e) => setFormData({ ...formData, technologies: e.target.value })}
+              placeholder="React, Node.js, TypeScript"
+            />
+          </div>
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label>Start Date</Label>
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">Start Date</Label>
               <Input
                 type="date"
                 value={formData.start_date?.split('T')[0] || ''}
                 onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
               />
             </div>
-            <div>
-              <Label>End Date</Label>
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">End Date</Label>
               <Input
                 type="date"
                 value={formData.end_date?.split('T')[0] || ''}
@@ -498,58 +515,51 @@ export default function ContentManagerPage() {
               />
             </div>
           </div>
-          <div>
-            <Label>Location</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Location</Label>
             <Input
               value={formData.location || ''}
               onChange={(e) => setFormData({ ...formData, location: e.target.value })}
             />
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 pt-2">
             <div className="flex items-center gap-2">
               <Switch
                 checked={formData.current ?? false}
                 onCheckedChange={(checked) => setFormData({ ...formData, current: checked })}
               />
-              <Label>Current Position</Label>
+              <Label className="text-sm font-medium">Current Position</Label>
             </div>
             <div className="flex items-center gap-2">
               <Switch
                 checked={formData.visible ?? true}
                 onCheckedChange={(checked) => setFormData({ ...formData, visible: checked })}
               />
-              <Label>Visible</Label>
+              <Label className="text-sm font-medium">Visible</Label>
             </div>
           </div>
         </>
       ),
       education: (
         <>
-          <div>
-            <Label>Institution *</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Institution *</Label>
             <Input
               value={formData.institution || ''}
               onChange={(e) => setFormData({ ...formData, institution: e.target.value })}
               required
             />
           </div>
-          <div>
-            <Label>Degree *</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Degree *</Label>
             <Input
               value={formData.degree || ''}
               onChange={(e) => setFormData({ ...formData, degree: e.target.value })}
               required
             />
           </div>
-          <div>
-            <Label>Field of Study</Label>
-            <Input
-              value={formData.field || ''}
-              onChange={(e) => setFormData({ ...formData, field: e.target.value })}
-            />
-          </div>
-          <div>
-            <Label>Description</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Description</Label>
             <Textarea
               value={formData.description || ''}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -557,16 +567,16 @@ export default function ContentManagerPage() {
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label>Start Date</Label>
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">Start Date</Label>
               <Input
                 type="date"
                 value={formData.start_date?.split('T')[0] || ''}
                 onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
               />
             </div>
-            <div>
-              <Label>End Date</Label>
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">End Date</Label>
               <Input
                 type="date"
                 value={formData.end_date?.split('T')[0] || ''}
@@ -575,57 +585,57 @@ export default function ContentManagerPage() {
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label>Location</Label>
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">Location</Label>
               <Input
                 value={formData.location || ''}
                 onChange={(e) => setFormData({ ...formData, location: e.target.value })}
               />
             </div>
-            <div>
-              <Label>Grade/GPA</Label>
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">Grade/GPA</Label>
               <Input
                 value={formData.grade || ''}
                 onChange={(e) => setFormData({ ...formData, grade: e.target.value })}
               />
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 pt-2">
             <Switch
               checked={formData.visible ?? true}
               onCheckedChange={(checked) => setFormData({ ...formData, visible: checked })}
             />
-            <Label>Visible</Label>
+            <Label className="text-sm font-medium">Visible</Label>
           </div>
         </>
       ),
       testimonials: (
         <>
-          <div>
-            <Label>Name *</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Name *</Label>
             <Input
               value={formData.name || ''}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
             />
           </div>
-          <div>
-            <Label>Role *</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Role *</Label>
             <Input
               value={formData.role || ''}
               onChange={(e) => setFormData({ ...formData, role: e.target.value })}
               required
             />
           </div>
-          <div>
-            <Label>Company</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Company</Label>
             <Input
               value={formData.company || ''}
               onChange={(e) => setFormData({ ...formData, company: e.target.value })}
             />
           </div>
-          <div>
-            <Label>Content *</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Content *</Label>
             <Textarea
               value={formData.content || ''}
               onChange={(e) => setFormData({ ...formData, content: e.target.value })}
@@ -633,15 +643,15 @@ export default function ContentManagerPage() {
               required
             />
           </div>
-          <div>
-            <Label>Image URL</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Image URL</Label>
             <Input
               value={formData.image_url || ''}
               onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
             />
           </div>
-          <div>
-            <Label>Rating (1-5)</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Rating (1-5)</Label>
             <Input
               type="number"
               min="1"
@@ -650,27 +660,27 @@ export default function ContentManagerPage() {
               onChange={(e) => setFormData({ ...formData, rating: parseInt(e.target.value) })}
             />
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 pt-2">
             <Switch
               checked={formData.visible ?? true}
               onCheckedChange={(checked) => setFormData({ ...formData, visible: checked })}
             />
-            <Label>Visible</Label>
+            <Label className="text-sm font-medium">Visible</Label>
           </div>
         </>
       ),
       services: (
         <>
-          <div>
-            <Label>Title *</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Title *</Label>
             <Input
               value={formData.title || ''}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               required
             />
           </div>
-          <div>
-            <Label>Description *</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Description *</Label>
             <Textarea
               value={formData.description || ''}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -678,16 +688,16 @@ export default function ContentManagerPage() {
               required
             />
           </div>
-          <div>
-            <Label>Icon</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Icon</Label>
             <Input
               value={formData.icon || ''}
               onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
               placeholder="Icon name or URL"
             />
           </div>
-          <div>
-            <Label>Features (JSON Array)</Label>
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Features (JSON Array)</Label>
             <Textarea
               value={formData.features || '[]'}
               onChange={(e) => setFormData({ ...formData, features: e.target.value })}
@@ -695,12 +705,12 @@ export default function ContentManagerPage() {
               rows={4}
             />
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 pt-2">
             <Switch
               checked={formData.visible ?? true}
               onCheckedChange={(checked) => setFormData({ ...formData, visible: checked })}
             />
-            <Label>Visible</Label>
+            <Label className="text-sm font-medium">Visible</Label>
           </div>
         </>
       ),
@@ -833,7 +843,7 @@ export default function ContentManagerPage() {
                 {editingItem ? 'Edit' : 'Add'} {currentSection.charAt(0).toUpperCase() + currentSection.slice(1)}
               </DialogTitle>
             </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-6 pt-4">
               {renderFormFields()}
               <div className="flex justify-end gap-2 pt-4">
                 <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
