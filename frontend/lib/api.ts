@@ -25,6 +25,13 @@ async function apiCall<T>(endpoint: string, options: ApiOptions = {}): Promise<T
   });
 
   if (!response.ok) {
+    // Handle 401 Unauthorized - clear auth and redirect to login
+    if (response.status === 401 && typeof window !== 'undefined') {
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('auth_user');
+      window.location.href = '/admin/login';
+    }
+    
     const error = await response.json().catch(() => ({ detail: 'An error occurred' }));
     throw new Error(error.detail || 'Request failed');
   }
@@ -275,6 +282,94 @@ export const settingsApi = {
     apiCall('/api/settings/stats', { token }),
 };
 
+// Upload API
+export const uploadApi = {
+  uploadImage: async (file: File, category: string = 'images', token: string) => {
+    console.log('uploadImage called:', {
+      fileName: file.name,
+      category,
+      hasToken: !!token,
+      tokenPrefix: token?.substring(0, 20) + '...'
+    });
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await fetch(`${API_URL}/api/upload/image?category=${category}`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    console.log('Upload response:', {
+      status: response.status,
+      statusText: response.statusText,
+      ok: response.ok
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ detail: 'Upload failed' }));
+      console.error('Upload failed:', error);
+      throw new Error(error.detail || 'Failed to upload image');
+    }
+
+    const result = await response.json();
+    console.log('Upload result:', result);
+    return result;
+  },
+
+  uploadMultipleImages: async (files: File[], category: string = 'images', token: string) => {
+    const formData = new FormData();
+    files.forEach(file => formData.append('files', file));
+
+    const response = await fetch(`${API_URL}/api/upload/images/bulk?category=${category}`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ detail: 'Upload failed' }));
+      throw new Error(error.detail || 'Failed to upload images');
+    }
+
+    return response.json();
+  },
+
+  deleteImage: (filepath: string, token: string) =>
+    apiCall(`/api/upload/image?filepath=${encodeURIComponent(filepath)}`, {
+      method: 'DELETE',
+      token,
+    }),
+
+  listImages: (category: string = 'images', token: string) =>
+    apiCall(`/api/upload/images?category=${category}`, { token }),
+
+  uploadResume: async (file: File, token: string) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await fetch(`${API_URL}/api/resume/upload`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ detail: 'Upload failed' }));
+      throw new Error(error.detail || 'Failed to upload resume');
+    }
+
+    return response.json();
+  },
+};
+
 export const api = {
   auth: authApi,
   hero: heroApi,
@@ -291,4 +386,5 @@ export const api = {
   theme: themeApi,
   resume: resumeApi,
   settings: settingsApi,
+  upload: uploadApi,
 };

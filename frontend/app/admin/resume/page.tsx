@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/auth-context';
 import { api } from '@/lib/api';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, Upload, Download, Trash2, CheckCircle, FileText } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -55,7 +56,7 @@ export default function ResumeManagerPage() {
     setMessage({ type: '', text: '' });
 
     try {
-      await api.resume.upload(selectedFile, token!);
+      await api.upload.uploadResume(selectedFile, token!);
       setMessage({ type: 'success', text: 'Resume uploaded successfully!' });
       setSelectedFile(null);
       fetchResumes();

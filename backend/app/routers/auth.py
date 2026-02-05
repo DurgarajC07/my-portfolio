@@ -13,9 +13,13 @@ security = HTTPBearer()
 def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)) -> dict:
     """Dependency to get current authenticated user"""
     token = credentials.credentials
+    
+    print(f"[AUTH] Received token: {token[:20]}..." if token else "[AUTH] No token received")
+    
     payload = decode_access_token(token)
     
     if payload is None:
+        print("[AUTH] Token decode failed - invalid token")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid authentication credentials"
@@ -23,10 +27,13 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
     
     username = payload.get("sub")
     if username is None:
+        print("[AUTH] Token payload missing 'sub' field")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid authentication credentials"
         )
+    
+    print(f"[AUTH] Authentication successful for user: {username}")
     
     with get_db() as conn:
         cursor = conn.cursor()

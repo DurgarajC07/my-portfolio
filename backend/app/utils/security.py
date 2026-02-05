@@ -40,8 +40,12 @@ def decode_access_token(token: str) -> Optional[dict]:
     """Decode and verify a JWT token"""
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        print(f"[SECURITY] Token decoded successfully. Payload: {payload}")
         return payload
-    except JWTError:
+    except JWTError as e:
+        print(f"[SECURITY] Token decode error: {type(e).__name__} - {str(e)}")
+        print(f"[SECURITY] SECRET_KEY length: {len(SECRET_KEY)}")
+        print(f"[SECURITY] ALGORITHM: {ALGORITHM}")
         return None
 
 def generate_reset_token() -> str:

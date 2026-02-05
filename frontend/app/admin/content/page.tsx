@@ -14,6 +14,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, Save, Plus, Edit, Trash2, GripVertical } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { ImageUpload } from '@/components/admin/image-upload';
 
 export default function ContentManagerPage() {
   const { token } = useAuth();
@@ -308,13 +309,12 @@ export default function ContentManagerPage() {
               required
             />
           </div>
-          <div className="space-y-2">
-            <Label className="text-sm font-medium">Image URL</Label>
-            <Input
-              value={formData.image_url || ''}
-              onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-            />
-          </div>
+          <ImageUpload
+            label="About Image"
+            value={formData.image_url || ''}
+            onChange={(url) => setFormData({ ...formData, image_url: url })}
+            category="about"
+          />
           <div className="space-y-2">
             <Label className="text-sm font-medium">Location</Label>
             <Input
@@ -413,13 +413,12 @@ export default function ContentManagerPage() {
               rows={4}
             />
           </div>
-          <div className="space-y-2">
-            <Label className="text-sm font-medium">Image URL</Label>
-            <Input
-              value={formData.image_url || ''}
-              onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-            />
-          </div>
+          <ImageUpload
+            label="Project Image"
+            value={formData.image_url || ''}
+            onChange={(url) => setFormData({ ...formData, image_url: url })}
+            category="projects"
+          />
           <div className="space-y-2">
             <Label className="text-sm font-medium">Tags (comma-separated)</Label>
             <Input
@@ -643,13 +642,12 @@ export default function ContentManagerPage() {
               required
             />
           </div>
-          <div className="space-y-2">
-            <Label className="text-sm font-medium">Image URL</Label>
-            <Input
-              value={formData.image_url || ''}
-              onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-            />
-          </div>
+          <ImageUpload
+            label="Person Image"
+            value={formData.image_url || ''}
+            onChange={(url) => setFormData({ ...formData, image_url: url })}
+            category="testimonials"
+          />
           <div className="space-y-2">
             <Label className="text-sm font-medium">Rating (1-5)</Label>
             <Input

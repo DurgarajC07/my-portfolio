@@ -3,8 +3,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse
 import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
 from app.database import init_db, create_default_admin, create_sample_data
-from app.routers import auth, content, blog, seo, theme, resume, settings
+from app.routers import auth, content, blog, seo, theme, resume, settings, upload
 
 # Initialize database on startup
 if not os.path.exists("portfolio.db"):
@@ -44,6 +49,7 @@ app.include_router(seo.router)
 app.include_router(theme.router)
 app.include_router(resume.router)
 app.include_router(settings.router)
+app.include_router(upload.router)
 
 # Root endpoint
 @app.get("/")

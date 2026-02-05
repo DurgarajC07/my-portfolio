@@ -13,6 +13,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Textarea } from '@/components/ui/textarea';
 import { Loader2, Save, RefreshCw, Palette } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { ImageUpload } from '@/components/admin/image-upload';
 
 export default function ThemeManagerPage() {
   const { token } = useAuth();
@@ -279,43 +280,19 @@ export default function ThemeManagerPage() {
               <CardDescription>Logo and favicon URLs</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div>
-                <Label>Logo URL</Label>
-                <Input
-                  value={themeData.logo_url || ''}
-                  onChange={(e) => setThemeData({ ...themeData, logo_url: e.target.value })}
-                  placeholder="https://example.com/logo.png"
-                />
-                {themeData.logo_url && (
-                  <div className="mt-2">
-                    <img
-                      src={themeData.logo_url}
-                      alt="Logo preview"
-                      className="max-h-16 object-contain"
-                      onError={(e) => (e.currentTarget.style.display = 'none')}
-                    />
-                  </div>
-                )}
-              </div>
+              <ImageUpload
+                label="Logo"
+                value={themeData.logo_url || ''}
+                onChange={(url) => setThemeData({ ...themeData, logo_url: url })}
+                category="assets"
+              />
 
-              <div>
-                <Label>Favicon URL</Label>
-                <Input
-                  value={themeData.favicon_url || ''}
-                  onChange={(e) => setThemeData({ ...themeData, favicon_url: e.target.value })}
-                  placeholder="https://example.com/favicon.ico"
-                />
-                {themeData.favicon_url && (
-                  <div className="mt-2">
-                    <img
-                      src={themeData.favicon_url}
-                      alt="Favicon preview"
-                      className="max-h-8 object-contain"
-                      onError={(e) => (e.currentTarget.style.display = 'none')}
-                    />
-                  </div>
-                )}
-              </div>
+              <ImageUpload
+                label="Favicon"
+                value={themeData.favicon_url || ''}
+                onChange={(url) => setThemeData({ ...themeData, favicon_url: url })}
+                category="assets"
+              />
             </CardContent>
           </Card>
 

@@ -13,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Loader2, Save, Plus, Edit, Trash2, Search, FileCode } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { ImageUpload } from '@/components/admin/image-upload';
 
 export default function SEOManagerPage() {
   const { token } = useAuth();
@@ -53,8 +54,8 @@ export default function SEOManagerPage() {
         api.seo.getRobotsTxt(),
       ]);
 
-      if (pagesRes.status === 'fulfilled') setPages(pagesRes.value);
-      if (robotsRes.status === 'fulfilled') setRobotsTxt(robotsRes.value);
+      if (pagesRes.status === 'fulfilled') setPages(pagesRes.value as typeof pages);
+      if (robotsRes.status === 'fulfilled') setRobotsTxt(robotsRes.value as typeof robotsTxt);
     } catch (error: any) {
       setMessage({ type: 'error', text: error.message });
     } finally {
@@ -371,14 +372,12 @@ export default function SEOManagerPage() {
                       rows={2}
                     />
                   </div>
-                  <div>
-                    <Label>OG Image URL</Label>
-                    <Input
-                      value={formData.og_image}
-                      onChange={(e) => setFormData({ ...formData, og_image: e.target.value })}
-                      placeholder="https://example.com/og-image.jpg"
-                    />
-                  </div>
+                  <ImageUpload
+                    label="OG Image"
+                    value={formData.og_image}
+                    onChange={(url) => setFormData({ ...formData, og_image: url })}
+                    category="assets"
+                  />
                 </div>
               </div>
 
@@ -410,14 +409,12 @@ export default function SEOManagerPage() {
                       rows={2}
                     />
                   </div>
-                  <div>
-                    <Label>Twitter Image URL</Label>
-                    <Input
-                      value={formData.twitter_image}
-                      onChange={(e) => setFormData({ ...formData, twitter_image: e.target.value })}
-                      placeholder="https://example.com/twitter-image.jpg"
-                    />
-                  </div>
+                  <ImageUpload
+                    label="Twitter Image"
+                    value={formData.twitter_image}
+                    onChange={(url) => setFormData({ ...formData, twitter_image: url })}
+                    category="assets"
+                  />
                 </div>
               </div>
 

@@ -12,6 +12,7 @@ import { Switch } from '@/components/ui/switch';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Loader2, Plus, Edit, Trash2, BookOpen, Eye } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { ImageUpload } from '@/components/admin/image-upload';
 
 export default function BlogPage() {
   const { token } = useAuth();
@@ -26,6 +27,7 @@ export default function BlogPage() {
     slug: '',
     content: '',
     excerpt: '',
+    image_url: '',
     category: '',
     tags: '',
     featured: false,
@@ -57,6 +59,7 @@ export default function BlogPage() {
       slug: post.slug,
       content: post.content,
       excerpt: post.excerpt || '',
+      image_url: post.image_url || '',
       category: post.category || '',
       tags: Array.isArray(post.tags) ? post.tags.join(', ') : post.tags || '',
       featured: post.featured,
@@ -75,6 +78,7 @@ export default function BlogPage() {
       slug: '',
       content: '',
       excerpt: '',
+      image_url: '',
       category: '',
       tags: '',
       featured: false,
@@ -241,6 +245,13 @@ export default function BlogPage() {
                   rows={2}
                 />
               </div>
+
+              <ImageUpload
+                label="Featured Image"
+                value={formData.image_url}
+                onChange={(url) => setFormData({ ...formData, image_url: url })}
+                category="blog"
+              />
 
               <div className="space-y-2">
                 <Label htmlFor="content">Content *</Label>
