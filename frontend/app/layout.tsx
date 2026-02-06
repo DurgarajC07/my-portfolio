@@ -9,14 +9,48 @@ import './globals.css'
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Portfolio - Full Stack Developer',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+  title: {
+    default: 'Portfolio - Full Stack Developer',
+    template: '%s | Portfolio',
+  },
   description: 'A modern portfolio website showcasing my work and skills',
-  keywords: 'portfolio, web development, full stack, developer',
+  keywords: ['portfolio', 'web development', 'full stack', 'developer', 'software engineer'],
   authors: [{ name: 'Your Name' }],
+  creator: 'Your Name',
+  publisher: 'Your Name',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: '/',
     title: 'Portfolio - Full Stack Developer',
     description: 'A modern portfolio website showcasing my work and skills',
-    type: 'website',
+    siteName: 'Portfolio',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Portfolio - Full Stack Developer',
+    description: 'A modern portfolio website showcasing my work and skills',
+    creator: '@yourusername',
+  },
+  verification: {
+    google: 'verification_token',
+    // yandex: 'verification_token',
+    // bing: 'verification_token',
+  },
+  alternates: {
+    canonical: '/',
   },
 }
 
