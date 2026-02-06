@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { ThemeProvider } from '@/components/theme-provider'
 import { AuthProvider } from '@/contexts/auth-context'
+import { DynamicSEO } from '@/components/dynamic-seo'
+import { DynamicTheme } from '@/components/dynamic-theme'
 import './globals.css'
 
 const inter = Inter({ subsets: ["latin"] });
@@ -33,6 +35,8 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
+            <DynamicSEO />
+            <DynamicTheme />
             {children}
           </AuthProvider>
         </ThemeProvider>

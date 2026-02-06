@@ -13,6 +13,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Loader2, Plus, Edit, Trash2, BookOpen, Eye } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ImageUpload } from '@/components/admin/image-upload';
+import { RichTextEditor } from '@/components/admin/rich-text-editor';
 
 export default function BlogPage() {
   const { token } = useAuth();
@@ -255,12 +256,10 @@ export default function BlogPage() {
 
               <div className="space-y-2">
                 <Label htmlFor="content">Content *</Label>
-                <Textarea
-                  id="content"
+                <RichTextEditor
                   value={formData.content}
-                  onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                  rows={10}
-                  required
+                  onChange={(content) => setFormData({ ...formData, content })}
+                  placeholder="Write your blog post content here..."
                 />
               </div>
 

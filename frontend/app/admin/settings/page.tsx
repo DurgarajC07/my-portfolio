@@ -34,10 +34,15 @@ export default function SettingsPage() {
 
   useEffect(() => {
     fetchSettings();
-    fetchBackups();
-    fetchActivityLogs();
-    fetchStats();
   }, []);
+
+  useEffect(() => {
+    if (token) {
+      fetchBackups();
+      fetchActivityLogs();
+      fetchStats();
+    }
+  }, [token]);
 
   const fetchSettings = async () => {
     try {

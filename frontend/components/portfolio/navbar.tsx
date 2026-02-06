@@ -1,12 +1,38 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import Image from 'next/image';
+import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { api } from '@/lib/api';
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [logo, setLogo] = useState<string | null>(null);
+  const [siteName, setSiteName] = useState('Portfolio');
+
+  useEffect(() => {
+    // Load theme settings for logo
+    const loadTheme = async () => {
+      try {
+        const theme = await api.theme.get() as any;
+        if (theme?.logo_url) {
+          setLogo(theme.logo_url);
+        }
+        
+        // Load site settings for name
+        const settings = await api.settings.get() as any;
+        if (settings?.site_name) {
+          setSiteName(settings.site_name);
+        }
+      } catch (error) {
+        console.error('Failed to load navbar settings:', error);
+      }
+    };
+    
+    loadTheme();
+  }, []);
 
   const navItems = [
     { label: 'Home', href: '#home' },
@@ -20,8 +46,20 @@ export function Navbar() {
     <nav className="fixed top-0 w-full bg-background/95 backdrop-blur-sm border-b border-border z-40">
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="text-xl font-bold text-accent">
-          Portfolio
+        <Link href="/" className="flex items-center gap-2">
+          {logo ? (
+            <Image 
+              src={logo} 
+              alt={siteName}
+              width={32}
+              height={32}
+              className="object-contain"
+              data-theme-logo
+            />
+          ) : null}
+          <span className="text-xl font-bold text-accent">
+            {siteName}
+          </span>
         </Link>
 
         {/* Desktop Menu */}
