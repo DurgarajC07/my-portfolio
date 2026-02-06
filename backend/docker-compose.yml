@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: portfolio-backend
+    ports:
+      - "${PORT:-8000}:${PORT:-8000}"
+    environment:
+      # Load from .env file
+      - SECRET_KEY=${SECRET_KEY:-super-secret-key-change-in-production-12345678}
+      - ALGORITHM=${ALGORITHM:-HS256}
+      - ACCESS_TOKEN_EXPIRE_MINUTES=${ACCESS_TOKEN_EXPIRE_MINUTES:-30}
+      - REFRESH_TOKEN_EXPIRE_DAYS=${REFRESH_TOKEN_EXPIRE_DAYS:-7}
+      - DATABASE_URL=${DATABASE_URL:-sqlite:///./portfolio.db}
+      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost:3000,http://127.0.0.1:3000}
+      - HOST=${HOST:-0.0.0.0}
+      - PORT=${PORT:-8000}
+      - WORKERS=${WORKERS:-1}
+      - ENVIRONMENT=${ENVIRONMENT:-development}
+      - DEBUG=${DEBUG:-true}
+    volumes:
+      # Mount volumes for persistence
+      - ./uploads:/app/uploads
+      - ./backups:/app/backups
+      - ./portfolio.db:/app/portfolio.db
+      - ./sitemap.xml:/app/sitemap.xml
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${PORT:-8000}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - portfolio-network
+
+networks:
+  portfolio-network:
+    driver: bridge
+
+volumes:
+  uploads:
+  backups:

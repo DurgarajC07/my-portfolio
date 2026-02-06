@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name: portfolio-backend
+    env: docker
+    region: oregon
+    plan: free
+    branch: main
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: 30
+      - key: REFRESH_TOKEN_EXPIRE_DAYS
+        value: 7
+      - key: DATABASE_URL
+        value: sqlite:///./portfolio.db
+      - key: CORS_ORIGINS
+        value: https://your-frontend.vercel.app,https://yourdomain.com
+      - key: HOST
+        value: 0.0.0.0
+      - key: PORT
+        value: 8000
+      - key: WORKERS
+        value: 1
+      - key: ENVIRONMENT
+        value: production
+      - key: DEBUG
+        value: false
+    healthCheckPath: /health
+    autoDeploy: true
