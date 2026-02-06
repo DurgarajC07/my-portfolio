@@ -61,6 +61,48 @@ async def root():
         "status": "running"
     }
 
+# Sitemap endpoint
+@app.get("/sitemap.xml")
+async def serve_sitemap():
+    """Serve sitemap.xml from root"""
+    from fastapi.responses import FileResponse
+    sitemap_path = os.path.join(os.path.dirname(__file__), "..", "sitemap.xml")
+    
+    if os.path.exists(sitemap_path):
+        return FileResponse(sitemap_path, media_type="application/xml")
+    else:
+        return JSONResponse(
+            status_code=404,
+            content={"detail": "Sitemap not found. Please generate it from the admin panel."}
+        )
+
+# Robots.txt endpoint
+@app.get("/robots.txt")
+async def serve_robots():
+    """Serve robots.txt from root"""
+    from app.database import get_db
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT robots_txt, site_url FROM site_settings LIMIT 1")
+        row = cursor.fetchone()
+        
+        if row and row["robots_txt"]:
+            content = row["robots_txt"]
+            # Ensure sitemap URL is included
+            if "Sitemap:" not in content:
+                site_url = row["site_url"] if row["site_url"] else "https://example.com"
+                content += f"\n\nSitemap: {site_url}/sitemap.xml"
+        else:
+            # Default robots.txt
+            site_url = row["site_url"] if row and row["site_url"] else "https://example.com"
+            content = f"""User-agent: *
+Allow: /
+
+Sitemap: {site_url}/sitemap.xml"""
+        
+        from fastapi.responses import Response
+        return Response(content=content, media_type="text/plain")
+
 # Health check
 @app.get("/health")
 async def health_check():

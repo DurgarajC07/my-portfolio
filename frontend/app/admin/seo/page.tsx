@@ -11,7 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Loader2, Save, Plus, Edit, Trash2, Search, FileCode } from 'lucide-react';
+import { Loader2, Save, Plus, Edit, Trash2, Search, FileCode, RefreshCw } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ImageUpload } from '@/components/admin/image-upload';
 
@@ -19,6 +19,7 @@ export default function SEOManagerPage() {
   const { token } = useAuth();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [generatingSitemap, setGeneratingSitemap] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
 
   const [pages, setPages] = useState<any[]>([]);
@@ -133,6 +134,22 @@ export default function SEOManagerPage() {
       setMessage({ type: 'error', text: error.message });
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleGenerateSitemap = async () => {
+    setGeneratingSitemap(true);
+    setMessage({ type: '', text: '' });
+    try {
+      const result: any = await api.seo.generateSitemap(token!);
+      setMessage({ 
+        type: 'success', 
+        text: `Sitemap generated successfully! ${result.urls_count} URLs included.` 
+      });
+    } catch (error: any) {
+      setMessage({ type: 'error', text: error.message });
+    } finally {
+      setGeneratingSitemap(false);
     }
   };
 
@@ -268,29 +285,94 @@ export default function SEOManagerPage() {
           <TabsContent value="sitemap">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Search className="h-5 w-5" />
-                  Sitemap
-                </CardTitle>
-                <CardDescription>
-                  Your sitemap is automatically generated
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-4">
-                  Your sitemap is available at:{' '}
-                  <a
-                    href="/api/seo/sitemap.xml"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-accent hover:underline"
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="flex items-center gap-2">
+                      <Search className="h-5 w-5" />
+                      Sitemap
+                    </CardTitle>
+                    <CardDescription>
+                      Generate and manage your sitemap.xml file
+                    </CardDescription>
+                  </div>
+                  <Button
+                    onClick={handleGenerateSitemap}
+                    disabled={generatingSitemap}
+                    className="gap-2"
                   >
-                    /api/seo/sitemap.xml
-                  </a>
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Submit this URL to search engines like Google Search Console and Bing Webmaster Tools.
-                </p>
+                    {generatingSitemap ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Generating...
+                      </>
+                    ) : (
+                      <>
+                        <RefreshCw className="h-4 w-4" />
+                        Generate Sitemap
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="rounded-lg bg-accent/10 p-4 space-y-3">
+                  <div>
+                    <p className="text-sm font-medium mb-2">Sitemap URL:</p>
+                    <a
+                      href="/sitemap.xml"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-accent hover:underline font-mono text-sm"
+                    >
+                      {typeof window !== 'undefined' ? window.location.origin : ''}/sitemap.xml
+                    </a>
+                  </div>
+                  
+                  <div className="pt-2 border-t border-border">
+                    <p className="text-sm text-muted-foreground mb-2">
+                      Submit your sitemap to search engines:
+                    </p>
+                    <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+                      <li>
+                        <a
+                          href="https://search.google.com/search-console"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-accent hover:underline"
+                        >
+                          Google Search Console
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="https://www.bing.com/webmasters"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-accent hover:underline"
+                        >
+                          Bing Webmaster Tools
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="rounded-lg bg-muted p-4">
+                  <p className="text-sm font-medium mb-2">What's included:</p>
+                  <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+                    <li>Homepage</li>
+                    <li>All published blog posts</li>
+                    <li>All SEO-managed pages</li>
+                    <li>Automatic last modified dates</li>
+                  </ul>
+                </div>
+
+                <Alert>
+                  <AlertDescription>
+                    💡 Click "Generate Sitemap" to create/update your sitemap.xml file with the latest content.
+                    The sitemap will be publicly accessible at /sitemap.xml for search engines to crawl.
+                  </AlertDescription>
+                </Alert>
               </CardContent>
             </Card>
           </TabsContent>

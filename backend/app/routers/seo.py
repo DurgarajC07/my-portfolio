@@ -4,6 +4,7 @@ from app.schemas import SEOPageCreate, SEOPageUpdate, SEOPage, SiteSettings
 from app.database import get_db
 from app.routers.auth import get_current_user
 from datetime import datetime
+import os
 
 router = APIRouter(prefix="/api/seo", tags=["SEO"])
 
@@ -94,9 +95,83 @@ async def delete_seo_page(page_name: str, current_user: dict = Depends(get_curre
             raise HTTPException(status_code=404, detail="SEO page not found")
         conn.commit()
 
+@router.post("/generate-sitemap")
+async def generate_sitemap_file(current_user: dict = Depends(get_current_user)):
+    """Generate and save sitemap.xml file (Admin only)"""
+    with get_db() as conn:
+        cursor = conn.cursor()
+        
+        # Get site URL from settings
+        cursor.execute("SELECT site_url FROM site_settings LIMIT 1")
+        settings = cursor.fetchone()
+        site_url = settings["site_url"] if settings and settings["site_url"] else "https://example.com"
+        
+        # Build sitemap
+        xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
+        xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n'
+        xml += '        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n'
+        xml += '        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9\n'
+        xml += '        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">\n'
+        
+        # Add homepage
+        xml += '  <url>\n'
+        xml += f'    <loc>{site_url}</loc>\n'
+        xml += f'    <lastmod>{datetime.now().strftime("%Y-%m-%d")}</lastmod>\n'
+        xml += '    <changefreq>weekly</changefreq>\n'
+        xml += '    <priority>1.0</priority>\n'
+        xml += '  </url>\n'
+        
+        # Add published blogs
+        cursor.execute("SELECT slug, updated_at, created_at FROM blogs WHERE status = 'published' ORDER BY created_at DESC")
+        blogs = cursor.fetchall()
+        for blog in blogs:
+            lastmod = blog["updated_at"] or blog["created_at"]
+            xml += '  <url>\n'
+            xml += f'    <loc>{site_url}/blog/{blog["slug"]}</loc>\n'
+            xml += f'    <lastmod>{lastmod[:10]}</lastmod>\n'
+            xml += '    <changefreq>monthly</changefreq>\n'
+            xml += '    <priority>0.8</priority>\n'
+            xml += '  </url>\n'
+        
+        # Add SEO pages (dynamic pages from admin)
+        cursor.execute("SELECT page_name, updated_at FROM seo_pages ORDER BY page_name")
+        seo_pages = cursor.fetchall()
+        for page in seo_pages:
+            # Skip if it's already included (like homepage)
+            if page["page_name"] not in ["/", "home", "index"]:
+                page_path = page["page_name"].lstrip("/")
+                xml += '  <url>\n'
+                xml += f'    <loc>{site_url}/{page_path}</loc>\n'
+                xml += f'    <lastmod>{page["updated_at"][:10]}</lastmod>\n'
+                xml += '    <changefreq>monthly</changefreq>\n'
+                xml += '    <priority>0.7</priority>\n'
+                xml += '  </url>\n'
+        
+        xml += '</urlset>'
+        
+        # Save to file
+        sitemap_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "sitemap.xml")
+        with open(sitemap_path, "w", encoding="utf-8") as f:
+            f.write(xml)
+        
+        return {
+            "message": "Sitemap generated successfully",
+            "path": "/sitemap.xml",
+            "urls_count": len(blogs) + len(seo_pages) + 1
+        }
+
 @router.get("/sitemap.xml")
-async def generate_sitemap():
-    """Generate sitemap.xml"""
+async def get_sitemap():
+    """Get sitemap.xml (serves from file if exists, generates dynamically otherwise)"""
+    # Try to serve from file first
+    sitemap_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "sitemap.xml")
+    
+    if os.path.exists(sitemap_path):
+        with open(sitemap_path, "r", encoding="utf-8") as f:
+            content = f.read()
+        return Response(content=content, media_type="application/xml")
+    
+    # If file doesn't exist, generate dynamically
     with get_db() as conn:
         cursor = conn.cursor()
         
@@ -125,15 +200,6 @@ async def generate_sitemap():
             xml += f'    <lastmod>{blog["updated_at"][:10]}</lastmod>\n'
             xml += '    <changefreq>monthly</changefreq>\n'
             xml += '    <priority>0.8</priority>\n'
-            xml += '  </url>\n'
-        
-        # Add static pages
-        static_pages = ["about", "projects", "contact"]
-        for page in static_pages:
-            xml += '  <url>\n'
-            xml += f'    <loc>{site_url}/{page}</loc>\n'
-            xml += '    <changefreq>monthly</changefreq>\n'
-            xml += '    <priority>0.7</priority>\n'
             xml += '  </url>\n'
         
         xml += '</urlset>'
