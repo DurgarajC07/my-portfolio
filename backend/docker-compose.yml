@@ -15,7 +15,7 @@ services:
       - ACCESS_TOKEN_EXPIRE_MINUTES=${ACCESS_TOKEN_EXPIRE_MINUTES:-30}
       - REFRESH_TOKEN_EXPIRE_DAYS=${REFRESH_TOKEN_EXPIRE_DAYS:-7}
       - DATABASE_URL=${DATABASE_URL:-sqlite:///./portfolio.db}
-      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost:3000,http://127.0.0.1:3000}
+      - CORS_ORIGINS=${CORS_ORIGINS:-https://durgarajchauhan.vercel.app,http://localhost:3000,http://127.0.0.1:3000}
       - HOST=${HOST:-0.0.0.0}
       - PORT=${PORT:-8000}
       - WORKERS=${WORKERS:-1}
