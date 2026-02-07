@@ -19,7 +19,7 @@ services:
       - key: DATABASE_URL
         value: sqlite:///./portfolio.db
       - key: CORS_ORIGINS
-        value: https://your-frontend.render.com,http://localhost:3000
+        value: https://durgarajchauhan.vercel.app,http://localhost:3000
       - key: HOST
         value: 0.0.0.0
       - key: PORT

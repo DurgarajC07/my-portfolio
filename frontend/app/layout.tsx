@@ -9,16 +9,16 @@ import './globals.css'
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://durgarajchauhan.vercel.app'),
   title: {
     default: 'Portfolio - Full Stack Developer',
     template: '%s | Portfolio',
   },
   description: 'A modern portfolio website showcasing my work and skills',
   keywords: ['portfolio', 'web development', 'full stack', 'developer', 'software engineer'],
-  authors: [{ name: 'Your Name' }],
-  creator: 'Your Name',
-  publisher: 'Your Name',
+  authors: [{ name: 'Durgaraj Chauhan' }],
+  creator: 'Durgaraj Chauhan',
+  publisher: 'Durgaraj Chauhan',
   robots: {
     index: true,
     follow: true,

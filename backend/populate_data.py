@@ -506,7 +506,7 @@ The system processes thousands of claims efficiently.""",
             contact_email, google_analytics, robots_txt)
             VALUES (1, 'Durgaraj Chauhan - AI Engineer', 
             'AI Engineer with 2.5+ years of hands-on experience in LLM-powered, Generative AI, and Agentic AI systems.',
-            'http://localhost:3000',
+            'https://durgarajchauhan.vercel.app',
             'durgarajchauhan@gmail.com',
             '',
             'User-agent: *\nAllow: /\nSitemap: http://localhost:3000/sitemap.xml')
