@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends, status, Response
 from typing import List
+from pydantic import BaseModel
 from app.schemas import SEOPageCreate, SEOPageUpdate, SEOPage, SiteSettings
 from app.database import get_db
 from app.routers.auth import get_current_user
@@ -211,22 +212,26 @@ async def get_robots_txt():
     """Get robots.txt content"""
     with get_db() as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT robots_txt FROM site_settings LIMIT 1")
+        cursor.execute("SELECT robots_txt, site_url FROM site_settings LIMIT 1")
         row = cursor.fetchone()
         
         if row and row["robots_txt"]:
             content = row["robots_txt"]
         else:
             # Default robots.txt
-            content = """User-agent: *
+            site_url = row["site_url"] if row and row["site_url"] else "https://example.com"
+            content = f"""User-agent: *
 Allow: /
 
-Sitemap: /api/seo/sitemap.xml"""
+Sitemap: {site_url}/sitemap.xml"""
         
         return Response(content=content, media_type="text/plain")
 
+class RobotsTxtUpdate(BaseModel):
+    content: str
+
 @router.put("/robots.txt")
-async def update_robots_txt(robots_txt: str, current_user: dict = Depends(get_current_user)):
+async def update_robots_txt(data: RobotsTxtUpdate, current_user: dict = Depends(get_current_user)):
     """Update robots.txt content"""
     with get_db() as conn:
         cursor = conn.cursor()
@@ -234,9 +239,9 @@ async def update_robots_txt(robots_txt: str, current_user: dict = Depends(get_cu
         # Check if settings exist
         cursor.execute("SELECT id FROM site_settings LIMIT 1")
         if cursor.fetchone():
-            cursor.execute("UPDATE site_settings SET robots_txt = ?, updated_at = CURRENT_TIMESTAMP", (robots_txt,))
+            cursor.execute("UPDATE site_settings SET robots_txt = ?, updated_at = CURRENT_TIMESTAMP", (data.content,))
         else:
-            cursor.execute("INSERT INTO site_settings (robots_txt) VALUES (?)", (robots_txt,))
+            cursor.execute("INSERT INTO site_settings (robots_txt) VALUES (?)", (data.content,))
         
         conn.commit()
         return {"message": "robots.txt updated successfully"}

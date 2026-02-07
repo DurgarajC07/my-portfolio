@@ -1,10 +1,10 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 import os
 from app.database import init_db, create_default_admin, create_sample_data
-from app.routers import auth, content, blog, seo, theme, resume, settings
+from app.routers import auth, content, blog, seo, theme, resume, settings, upload
 
 # Initialize database on startup
 if not os.path.exists("portfolio.db"):
@@ -44,6 +44,7 @@ app.include_router(seo.router)
 app.include_router(theme.router)
 app.include_router(resume.router)
 app.include_router(settings.router)
+app.include_router(upload.router)
 
 # Root endpoint
 @app.get("/")
@@ -59,6 +60,17 @@ async def root():
 @app.get("/health")
 async def health_check():
     return {"status": "healthy"}
+
+# Sitemap and robots.txt at root level for SEO
+@app.get("/sitemap.xml")
+async def root_sitemap():
+    """Serve sitemap.xml at root level"""
+    return await seo.get_sitemap()
+
+@app.get("/robots.txt")
+async def root_robots():
+    """Serve robots.txt at root level"""
+    return await seo.get_robots_txt()
 
 # Global exception handler
 @app.exception_handler(Exception)
