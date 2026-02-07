@@ -28,6 +28,9 @@ RUN pip install --upgrade pip && \
 # Copy application code
 COPY . .
 
+# Make entrypoint script executable
+RUN chmod +x entrypoint.sh
+
 # Create uploads directory
 RUN mkdir -p uploads/resumes uploads/images backups && \
     chmod -R 755 uploads backups
@@ -46,6 +49,5 @@ EXPOSE ${PORT:-8000}
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
     CMD curl -f http://localhost:${PORT:-8000}/health || exit 1
 
-# Start application
-# Use environment variables for host and port (required for Render)
-CMD uvicorn app.main:app --host ${HOST:-0.0.0.0} --port ${PORT:-8000} --workers ${WORKERS:-1}
+# Start application using entrypoint script
+ENTRYPOINT ["./entrypoint.sh"]

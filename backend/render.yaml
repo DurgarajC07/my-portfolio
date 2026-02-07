@@ -1,0 +1,44 @@
+services:
+  - type: web
+    name: portfolio-backend
+    runtime: docker
+    region: oregon
+    plan: free
+    branch: main
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+
+    # Environment variables for Render
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: 30
+      - key: DATABASE_URL
+        value: sqlite:///./portfolio.db
+      - key: CORS_ORIGINS
+        value: https://your-frontend.render.com,http://localhost:3000
+      - key: HOST
+        value: 0.0.0.0
+      - key: PORT
+        value: 10000
+      - key: WORKERS
+        value: 1
+      - key: ENVIRONMENT
+        value: production
+      - key: DEBUG
+        value: false
+
+    # Health check endpoint
+    healthCheckPath: /health
+
+    # Auto-deploy
+    autoDeploy: true
+
+    # Persistent disk for database
+    disk:
+      name: portfolio-data
+      mountPath: /app
+      sizeGB: 1
