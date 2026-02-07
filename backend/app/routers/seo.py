@@ -105,7 +105,7 @@ async def generate_sitemap_file(current_user: dict = Depends(get_current_user)):
         # Get site URL from settings
         cursor.execute("SELECT site_url FROM site_settings LIMIT 1")
         settings = cursor.fetchone()
-        site_url = settings["site_url"] if settings and settings["site_url"] else "https://example.com"
+        site_url = settings["site_url"] if settings and settings["site_url"] else "https://durgarajchauhan.vercel.app"
         
         # Build sitemap
         xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
