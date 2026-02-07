@@ -3,13 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse
 import os
-from dotenv import load_dotenv
-
-# Load environment variables from .env file
-load_dotenv()
-
 from app.database import init_db, create_default_admin, create_sample_data
-from app.routers import auth, content, blog, seo, theme, resume, settings, upload
+from app.routers import auth, content, blog, seo, theme, resume, settings
 
 # Initialize database on startup
 if not os.path.exists("portfolio.db"):
@@ -49,7 +44,6 @@ app.include_router(seo.router)
 app.include_router(theme.router)
 app.include_router(resume.router)
 app.include_router(settings.router)
-app.include_router(upload.router)
 
 # Root endpoint
 @app.get("/")
@@ -60,48 +54,6 @@ async def root():
         "docs": "/api/docs",
         "status": "running"
     }
-
-# Sitemap endpoint
-@app.get("/sitemap.xml")
-async def serve_sitemap():
-    """Serve sitemap.xml from root"""
-    from fastapi.responses import FileResponse
-    sitemap_path = os.path.join(os.path.dirname(__file__), "..", "sitemap.xml")
-    
-    if os.path.exists(sitemap_path):
-        return FileResponse(sitemap_path, media_type="application/xml")
-    else:
-        return JSONResponse(
-            status_code=404,
-            content={"detail": "Sitemap not found. Please generate it from the admin panel."}
-        )
-
-# Robots.txt endpoint
-@app.get("/robots.txt")
-async def serve_robots():
-    """Serve robots.txt from root"""
-    from app.database import get_db
-    with get_db() as conn:
-        cursor = conn.cursor()
-        cursor.execute("SELECT robots_txt, site_url FROM site_settings LIMIT 1")
-        row = cursor.fetchone()
-        
-        if row and row["robots_txt"]:
-            content = row["robots_txt"]
-            # Ensure sitemap URL is included
-            if "Sitemap:" not in content:
-                site_url = row["site_url"] if row["site_url"] else "https://example.com"
-                content += f"\n\nSitemap: {site_url}/sitemap.xml"
-        else:
-            # Default robots.txt
-            site_url = row["site_url"] if row and row["site_url"] else "https://example.com"
-            content = f"""User-agent: *
-Allow: /
-
-Sitemap: {site_url}/sitemap.xml"""
-        
-        from fastapi.responses import Response
-        return Response(content=content, media_type="text/plain")
 
 # Health check
 @app.get("/health")
@@ -119,6 +71,12 @@ async def global_exception_handler(request: Request, exc: Exception):
 # Startup event
 @app.on_event("startup")
 async def startup_event():
+    # Ensure admin user exists
+    try:
+        create_default_admin()
+    except Exception:
+        pass  # Admin already exists or will be created
+    
     print("🚀 Portfolio CMS API started successfully!")
     print("📚 API Documentation: http://localhost:8000/api/docs")
     print("🔐 Default admin credentials:")

@@ -5,12 +5,30 @@ import sqlite3
 from datetime import datetime
 import os
 
+# Import database initialization function
+from app.database import init_db
+
 # Get the database path
 db_path = os.path.join(os.path.dirname(__file__), 'portfolio.db')
-conn = sqlite3.connect(db_path)
-cursor = conn.cursor()
 
 def populate_data():
+    # First, initialize the database schema
+    print("🔧 Initializing database schema...")
+    init_db()
+    print("✅ Database schema created!")
+    
+    # Create default admin user
+    print("👤 Creating default admin user...")
+    try:
+        from app.database import create_default_admin
+        create_default_admin()
+    except Exception as e:
+        print(f"⚠️  Could not create admin user (will be created on app startup): {e}")
+    
+    # Now populate with data
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    
     try:
         # 1. Hero Section
         cursor.execute("""
@@ -542,8 +560,13 @@ The system processes thousands of claims efficiently.""",
         print(f"   - Theme settings: 1 entry")
         print(f"   - SEO pages: {len(seo_pages)} entries")
         
+        conn.commit()
+        print("\n✅ Database populated successfully!")
+        
     except Exception as e:
         print(f"❌ Error populating database: {e}")
+        import traceback
+        traceback.print_exc()
         conn.rollback()
     finally:
         conn.close()

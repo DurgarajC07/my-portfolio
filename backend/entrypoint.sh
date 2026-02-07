@@ -9,7 +9,6 @@ echo "🚀 Starting Portfolio CMS Backend..."
 if [ ! -f "portfolio.db" ]; then
     echo "📦 Database not found. Creating and populating..."
     python populate_data.py
-    echo "✅ Database populated successfully!"
 else
     # Check if database is empty (check if users table has records)
     USER_COUNT=$(python -c "import sqlite3; conn = sqlite3.connect('portfolio.db'); cursor = conn.cursor(); cursor.execute('SELECT COUNT(*) FROM users'); print(cursor.fetchone()[0]); conn.close()" 2>/dev/null || echo "0")
@@ -17,7 +16,6 @@ else
     if [ "$USER_COUNT" -eq "0" ]; then
         echo "📦 Database is empty. Populating with initial data..."
         python populate_data.py
-        echo "✅ Database populated successfully!"
     else
         echo "✅ Database already exists with $USER_COUNT users"
     fi
