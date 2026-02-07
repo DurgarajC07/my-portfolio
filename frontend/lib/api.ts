@@ -213,7 +213,11 @@ export const seoApi = {
   getSitemap: () => fetch(`${API_URL}/sitemap.xml`).then(r => r.text()),
   getRobotsTxt: () => fetch(`${API_URL}/robots.txt`).then(r => r.text()),
   updateRobotsTxt: (content: string, token: string) =>
-    apiCall('/api/seo/robots.txt', { method: 'PUT', body: JSON.stringify(content), token }),
+    apiCall('/api/seo/robots.txt', { 
+      method: 'PUT', 
+      body: JSON.stringify({ content }), 
+      token 
+    }),
   getSeoScore: (token: string) => apiCall('/api/seo/score', { token }),
 };
 
