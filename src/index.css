@@ -237,3 +237,41 @@ body {
   .reveal { opacity: 1; transform: none; }
   .word-mask > span { transform: none; }
 }
+
+/* -------------------- responsive helpers -------------------- */
+:root {
+  --site-max-width: 1100px;
+  --site-pad: 16px;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--site-max-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--site-pad);
+  padding-right: var(--site-pad);
+}
+
+@media (min-width: 1280px) {
+  :root { --site-max-width: 1280px; --site-pad: 24px; }
+}
+
+/* ensure media scale and touch targets */
+img, video, svg { max-width: 100%; height: auto; display: block; }
+button, a { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+
+/* smaller-screen adjustments */
+@media (max-width: 640px) {
+  .disp { font-size: clamp(1.8rem, 9vw, 4.2rem); }
+  .mono { font-size: 12px; }
+  .noise-layer { opacity: 0.03; }
+  .grid-bg { background-size: 48px 48px; }
+}
+
+/* medium screens */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .disp { font-size: clamp(2.2rem, 8.5vw, 6.2rem); }
+  .word-mask > span { transform: translateY(0); }
+}
+
